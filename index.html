@@ -790,6 +790,67 @@
       line-height: 1.4;
     }
 
+    /* 다른 사이즈 파일 강조 */
+    .resize-file-card.different-size {
+      border: 2px solid rgba(255, 152, 0, 0.6);
+      background: rgba(255, 152, 0, 0.1);
+      position: relative;
+    }
+
+    .resize-file-card .different-badge {
+      position: absolute;
+      top: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(255, 152, 0, 0.9);
+      color: #fff;
+      font-size: 9px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 10px;
+      white-space: nowrap;
+    }
+
+    /* 사이즈 분포 요약 */
+    .resize-size-summary {
+      grid-column: 1 / -1;
+      background: rgba(0,0,0,0.3);
+      border-radius: 10px;
+      padding: 12px 15px;
+      margin-bottom: 10px;
+    }
+
+    .resize-size-summary .summary-title {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.8);
+      margin-bottom: 8px;
+    }
+
+    .resize-size-summary .summary-items {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .resize-size-summary .summary-item {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 15px;
+      background: rgba(255,255,255,0.1);
+    }
+
+    .resize-size-summary .summary-item.main {
+      background: rgba(76, 175, 80, 0.3);
+      color: #81c784;
+    }
+
+    .resize-size-summary .summary-item.different {
+      background: rgba(255, 152, 0, 0.3);
+      color: #ffb74d;
+    }
+
     /* 즐겨찾기 프리셋 */
     .resize-presets {
       display: flex;
@@ -3041,10 +3102,51 @@
       const list = document.getElementById('resizeFileList');
       list.innerHTML = '';
 
+      // 가장 많은 사이즈 찾기 (모드 계산)
+      const sizeCount = {};
+      resizeFiles.forEach(item => {
+        const sizeKey = `${item.width}x${item.height}`;
+        sizeCount[sizeKey] = (sizeCount[sizeKey] || 0) + 1;
+      });
+
+      // 가장 많은 사이즈 찾기
+      let mostCommonSize = '';
+      let maxCount = 0;
+      for (const [size, count] of Object.entries(sizeCount)) {
+        if (count > maxCount) {
+          maxCount = count;
+          mostCommonSize = size;
+        }
+      }
+
+      // 다른 사이즈 개수 계산
+      const differentCount = resizeFiles.filter(item => `${item.width}x${item.height}` !== mostCommonSize).length;
+
+      // 사이즈 그룹 요약 표시
+      if (Object.keys(sizeCount).length > 1) {
+        const summaryDiv = document.createElement('div');
+        summaryDiv.className = 'resize-size-summary';
+        summaryDiv.innerHTML = `
+          <span class="summary-title">📊 사이즈 분포</span>
+          <div class="summary-items">
+            ${Object.entries(sizeCount).map(([size, count]) => {
+              const [w, h] = size.split('x');
+              const isMain = size === mostCommonSize;
+              return `<span class="summary-item ${isMain ? 'main' : 'different'}">${w}×${h} (${count}개)${isMain ? ' ✓' : ' ⚠️'}</span>`;
+            }).join('')}
+          </div>
+        `;
+        list.appendChild(summaryDiv);
+      }
+
       resizeFiles.forEach((item, index) => {
+        const sizeKey = `${item.width}x${item.height}`;
+        const isDifferent = sizeKey !== mostCommonSize && Object.keys(sizeCount).length > 1;
+
         const div = document.createElement('div');
-        div.className = 'resize-file-card';
+        div.className = `resize-file-card ${isDifferent ? 'different-size' : ''}`;
         div.innerHTML = `
+          ${isDifferent ? '<span class="different-badge">⚠️ 다른 사이즈</span>' : ''}
           <img src="${item.url}" alt="${item.name}">
           <div class="file-name">${item.name}</div>
           <div class="file-detail">
