@@ -1651,18 +1651,21 @@
       if (splitLeftBlob) {
         fallbackDownload(splitLeftBlob, '첫장.jpg');
         trackFeatureUsage('첫장막장 분리', 'download_left');
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
       }
     });
     document.getElementById('downloadRight').addEventListener('click', () => {
       if (splitRightBlob) {
         fallbackDownload(splitRightBlob, '막장.jpg');
         trackFeatureUsage('첫장막장 분리', 'download_right');
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
       }
     });
     document.getElementById('downloadBoth').addEventListener('click', () => {
       if (splitLeftBlob) fallbackDownload(splitLeftBlob, '첫장.jpg');
       if (splitRightBlob) fallbackDownload(splitRightBlob, '막장.jpg');
       trackFeatureUsage('첫장막장 분리', 'download_both');
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
     });
 
     // ========== 첫장/막장 늘리기 (NEW) ==========
@@ -1888,6 +1891,7 @@
         const outputName = document.getElementById('extendOutputName').value.trim() || extendFileName;
         fallbackDownload(extendResultBlob, `${outputName}.jpg`);
         trackFeatureUsage('첫장막장 늘리기', 'download_extended');
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
       }
     });
 
