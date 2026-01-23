@@ -741,6 +741,102 @@
       background: rgba(244, 67, 54, 0.4);
     }
 
+    /* 리사이즈 파일 그리드 (3열) */
+    .resize-file-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      max-height: 350px;
+      overflow-y: auto;
+      padding: 10px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+    }
+
+    .resize-file-card {
+      background: rgba(255,255,255,0.05);
+      border-radius: 10px;
+      padding: 10px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .resize-file-card:hover {
+      background: rgba(255,255,255,0.1);
+      border-color: rgba(212, 175, 55, 0.3);
+    }
+
+    .resize-file-card img {
+      width: 100%;
+      height: 80px;
+      object-fit: cover;
+      border-radius: 6px;
+      margin-bottom: 8px;
+    }
+
+    .resize-file-card .file-name {
+      font-size: 11px;
+      font-weight: 500;
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .resize-file-card .file-detail {
+      font-size: 10px;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.4;
+    }
+
+    /* 즐겨찾기 프리셋 */
+    .resize-presets {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      padding: 15px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 12px;
+    }
+
+    .preset-btn {
+      background: rgba(255,255,255,0.08);
+      border: 2px solid rgba(212, 175, 55, 0.3);
+      border-radius: 10px;
+      padding: 12px 18px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      text-align: center;
+      min-width: 110px;
+    }
+
+    .preset-btn:hover {
+      background: rgba(212, 175, 55, 0.2);
+      border-color: rgba(212, 175, 55, 0.6);
+      transform: translateY(-2px);
+    }
+
+    .preset-btn.active {
+      background: rgba(212, 175, 55, 0.3);
+      border-color: #d4af37;
+    }
+
+    .preset-btn .preset-size {
+      display: block;
+      color: #f4d03f;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .preset-btn .preset-desc {
+      display: block;
+      color: rgba(255,255,255,0.5);
+      font-size: 10px;
+    }
+
     /* 페이지 구성 미리보기 */
     .page-layout-preview {
       display: flex;
@@ -1308,17 +1404,64 @@
       <div class="glass-card preview-section" id="resizePreviewSection">
         <h2 class="section-title">📋 이미지 목록</h2>
 
-        <div class="resize-file-list" id="resizeFileList" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;"></div>
+        <!-- 3열 그리드 이미지 목록 -->
+        <div class="resize-file-grid" id="resizeFileList"></div>
+
+        <h2 class="section-title" style="margin-top: 30px;">⭐ 즐겨찾기 (자주 사용하는 크기)</h2>
+
+        <div class="resize-presets" id="resizePresets">
+          <button class="preset-btn" data-width="11" data-height="8.6" data-label="11×8.6">
+            <span class="preset-size">11" × 8.6"</span>
+            <span class="preset-desc">14×11 → 축소</span>
+          </button>
+          <button class="preset-btn" data-width="8" data-height="6.3" data-label="8×6.3">
+            <span class="preset-size">8" × 6.3"</span>
+            <span class="preset-desc">14×11 → 축소</span>
+          </button>
+          <button class="preset-btn" data-width="10" data-height="8" data-label="10×8">
+            <span class="preset-size">10" × 8"</span>
+            <span class="preset-desc">일반 사이즈</span>
+          </button>
+          <button class="preset-btn" data-width="12" data-height="9" data-label="12×9">
+            <span class="preset-size">12" × 9"</span>
+            <span class="preset-desc">일반 사이즈</span>
+          </button>
+        </div>
 
         <h2 class="section-title" style="margin-top: 30px;">⚙️ 변경 설정</h2>
+
+        <!-- 원본 사이즈 표시 -->
+        <div class="option-box" style="background: rgba(212, 175, 55, 0.1); border-color: rgba(212, 175, 55, 0.3);">
+          <div class="option-group">
+            <label>📐 원본 사이즈:</label>
+            <span id="resizeOriginalSize" style="color: #f4d03f; font-weight: 600;">- × - 인치</span>
+            <span style="color: rgba(255,255,255,0.5); margin-left: 10px;" id="resizeOriginalRatio">(비율: -)</span>
+          </div>
+        </div>
+
+        <!-- 비율 유지 옵션 -->
+        <div class="option-box">
+          <div class="option-group">
+            <label style="display: flex; align-items: center; gap: 8px; cursor: pointer;">
+              <input type="checkbox" id="resizeKeepRatio" checked style="width: 18px; height: 18px;">
+              <span>🔗 비율 유지 (한쪽 입력 시 자동 계산)</span>
+            </label>
+          </div>
+        </div>
 
         <div class="option-box">
           <div class="option-group">
             <label>📏 새 사이즈 (인치):</label>
-            <div style="display: flex; gap: 10px; align-items: center;">
-              <input type="number" id="resizeNewWidth" placeholder="가로" step="0.1" min="0.1" style="width: 80px;">
+            <div style="display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">가로</span>
+                <input type="number" id="resizeNewWidth" placeholder="가로" step="0.1" min="0.1" style="width: 80px;">
+              </div>
               <span style="color: rgba(255,255,255,0.5);">×</span>
-              <input type="number" id="resizeNewHeight" placeholder="세로" step="0.1" min="0.1" style="width: 80px;">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <span style="color: rgba(255,255,255,0.6); font-size: 12px;">세로</span>
+                <input type="number" id="resizeNewHeight" placeholder="세로" step="0.1" min="0.1" style="width: 80px;">
+              </div>
               <span style="color: rgba(255,255,255,0.5);">인치</span>
             </div>
           </div>
@@ -1336,6 +1479,7 @@
           <div class="option-group">
             <label>📄 결과 픽셀:</label>
             <span id="resizeResultPixels" style="color: #f4d03f; font-weight: 600;">- × - px</span>
+            <span id="resizeScalePercent" style="color: rgba(255,255,255,0.6); margin-left: 15px; font-size: 13px;"></span>
           </div>
         </div>
 
@@ -2626,6 +2770,9 @@
       resizeFiles = [];
       resizeDirHandle = null;
       resizeOriginalFolderName = '';
+      resizeOriginalWidth = 0;
+      resizeOriginalHeight = 0;
+      resizeAspectRatio = 1;
       document.getElementById('resizeFileList').innerHTML = '';
       document.getElementById('resizeFileCount').textContent = '0개 파일 선택됨';
       document.getElementById('resizePreviewSection').classList.remove('show');
@@ -2638,6 +2785,10 @@
       document.getElementById('resizeNewHeight').value = '';
       document.getElementById('resizeNewDPI').value = '300';
       document.getElementById('resizeResultPixels').textContent = '- × - px';
+      document.getElementById('resizeOriginalSize').textContent = '- × - 인치';
+      document.getElementById('resizeOriginalRatio').textContent = '(비율: -)';
+      document.getElementById('resizeScalePercent').textContent = '';
+      document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
     }
 
     const resizeUploadZone = document.getElementById('resizeUploadZone');
@@ -2742,9 +2893,18 @@
 
         // 첫 번째 파일의 사이즈로 기본값 설정
         const first = resizeFiles[0];
+        resizeOriginalWidth = parseFloat(first.widthInch);
+        resizeOriginalHeight = parseFloat(first.heightInch);
+        resizeAspectRatio = resizeOriginalWidth / resizeOriginalHeight;
+
         document.getElementById('resizeNewWidth').value = first.widthInch;
         document.getElementById('resizeNewHeight').value = first.heightInch;
         document.getElementById('resizeNewDPI').value = first.dpi;
+
+        // 원본 사이즈 표시
+        document.getElementById('resizeOriginalSize').textContent = `${first.widthInch}" × ${first.heightInch}"`;
+        document.getElementById('resizeOriginalRatio').textContent = `(비율: ${resizeAspectRatio.toFixed(3)})`;
+
         updateResizeResultPixels();
 
         smoothScrollToBottom(800);
@@ -2759,19 +2919,76 @@
 
       resizeFiles.forEach((item, index) => {
         const div = document.createElement('div');
-        div.className = 'pdf-file-item';
+        div.className = 'resize-file-card';
         div.innerHTML = `
-          <span class="file-order">${index + 1}</span>
-          <img class="file-thumb" src="${item.url}" alt="${item.name}">
-          <div class="file-info">
-            <div class="file-name">${item.name}</div>
-            <div class="file-size">${item.width} × ${item.height} px</div>
-            <div class="file-dimensions">${item.widthInch}" × ${item.heightInch}" @ ${item.dpi} DPI</div>
+          <img src="${item.url}" alt="${item.name}">
+          <div class="file-name">${item.name}</div>
+          <div class="file-detail">
+            ${item.width} × ${item.height} px<br>
+            ${item.widthInch}" × ${item.heightInch}" @ ${item.dpi} DPI
           </div>
         `;
         list.appendChild(div);
       });
     }
+
+    // 원본 비율 관련 변수
+    let resizeOriginalWidth = 0;
+    let resizeOriginalHeight = 0;
+    let resizeAspectRatio = 1;
+    let isUpdatingRatio = false;
+
+    // 비율 유지하며 가로 변경 시 세로 자동 계산
+    document.getElementById('resizeNewWidth').addEventListener('input', function() {
+      if (isUpdatingRatio) return;
+      const keepRatio = document.getElementById('resizeKeepRatio').checked;
+      if (keepRatio && resizeAspectRatio > 0) {
+        const newWidth = parseFloat(this.value) || 0;
+        if (newWidth > 0) {
+          isUpdatingRatio = true;
+          const newHeight = (newWidth / resizeAspectRatio).toFixed(2);
+          document.getElementById('resizeNewHeight').value = newHeight;
+          isUpdatingRatio = false;
+        }
+      }
+      updateResizeResultPixels();
+    });
+
+    // 비율 유지하며 세로 변경 시 가로 자동 계산
+    document.getElementById('resizeNewHeight').addEventListener('input', function() {
+      if (isUpdatingRatio) return;
+      const keepRatio = document.getElementById('resizeKeepRatio').checked;
+      if (keepRatio && resizeAspectRatio > 0) {
+        const newHeight = parseFloat(this.value) || 0;
+        if (newHeight > 0) {
+          isUpdatingRatio = true;
+          const newWidth = (newHeight * resizeAspectRatio).toFixed(2);
+          document.getElementById('resizeNewWidth').value = newWidth;
+          isUpdatingRatio = false;
+        }
+      }
+      updateResizeResultPixels();
+    });
+
+    // 프리셋 클릭 이벤트
+    document.querySelectorAll('.preset-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        const width = parseFloat(this.dataset.width);
+        const height = parseFloat(this.dataset.height);
+
+        // 활성 상태 표시
+        document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+        this.classList.add('active');
+
+        // 값 설정
+        isUpdatingRatio = true;
+        document.getElementById('resizeNewWidth').value = width;
+        document.getElementById('resizeNewHeight').value = height;
+        isUpdatingRatio = false;
+
+        updateResizeResultPixels();
+      });
+    });
 
     // 결과 픽셀 계산 업데이트
     function updateResizeResultPixels() {
@@ -2783,10 +3000,16 @@
       const heightPx = Math.round(heightInch * dpi);
 
       document.getElementById('resizeResultPixels').textContent = `${widthPx} × ${heightPx} px`;
+
+      // 축소/확대 비율 계산
+      if (resizeOriginalWidth > 0 && resizeOriginalHeight > 0) {
+        const scaleW = (widthInch / resizeOriginalWidth * 100).toFixed(1);
+        const scaleH = (heightInch / resizeOriginalHeight * 100).toFixed(1);
+        const avgScale = ((parseFloat(scaleW) + parseFloat(scaleH)) / 2).toFixed(1);
+        document.getElementById('resizeScalePercent').textContent = `(${avgScale}% ${avgScale < 100 ? '축소' : avgScale > 100 ? '확대' : ''})`;
+      }
     }
 
-    document.getElementById('resizeNewWidth').addEventListener('input', updateResizeResultPixels);
-    document.getElementById('resizeNewHeight').addEventListener('input', updateResizeResultPixels);
     document.getElementById('resizeNewDPI').addEventListener('input', updateResizeResultPixels);
 
     // 사이즈 변경 실행
