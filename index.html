@@ -1388,12 +1388,14 @@
 
         <div class="upload-zone" id="resizeUploadZone">
           <div class="upload-icon">📂</div>
-          <h3>폴더를 드래그하거나 클릭하여 선택</h3>
-          <span>JPG, PNG 이미지 폴더 · 해상도/사이즈 일괄 변경</span>
+          <h3>폴더 또는 파일을 드래그하거나 클릭</h3>
+          <span>JPG, PNG 이미지 · 해상도/사이즈 일괄 변경</span>
         </div>
 
-        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 18px;">
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 18px; flex-wrap: wrap;">
           <button class="btn-secondary" id="resizeSelectFolderBtn">📂 폴더 선택</button>
+          <button class="btn-secondary" id="resizeSelectFilesBtn">📄 파일 선택</button>
+          <button class="btn-secondary" id="resizeAddFilesBtn" style="display: none;">➕ 파일 추가</button>
         </div>
 
         <div style="text-align: center; margin-top: 18px;">
@@ -2789,36 +2791,56 @@
       document.getElementById('resizeOriginalRatio').textContent = '(비율: -)';
       document.getElementById('resizeScalePercent').textContent = '';
       document.querySelectorAll('.preset-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById('resizeAddFilesBtn').style.display = 'none';
     }
 
     const resizeUploadZone = document.getElementById('resizeUploadZone');
 
     resizeUploadZone.addEventListener('dragover', (e) => { e.preventDefault(); resizeUploadZone.classList.add('dragover'); });
     resizeUploadZone.addEventListener('dragleave', () => resizeUploadZone.classList.remove('dragover'));
-    resizeUploadZone.addEventListener('click', () => selectResizeFolder());
+    resizeUploadZone.addEventListener('click', () => selectResizeFiles());
     resizeUploadZone.addEventListener('drop', async (e) => {
       e.preventDefault();
       resizeUploadZone.classList.remove('dragover');
       const items = e.dataTransfer.items;
+      const fileHandles = [];
+      let folderFound = false;
+
       if (items && items.length > 0) {
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
           if (item.kind === 'file') {
             try {
               const handle = await item.getAsFileSystemHandle();
-              if (handle && handle.kind === 'directory') {
-                await loadResizeFolder(handle);
-                break;
+              if (handle) {
+                if (handle.kind === 'directory') {
+                  await loadResizeFolder(handle);
+                  folderFound = true;
+                  break;
+                } else if (handle.kind === 'file') {
+                  fileHandles.push(handle);
+                }
               }
             } catch (err) {
-              console.error('폴더 드롭 오류:', err);
+              // File System Access API not supported, use dataTransfer.files
+              const file = item.getAsFile();
+              if (file) fileHandles.push({ getFile: () => Promise.resolve(file), name: file.name });
             }
           }
         }
       }
+
+      // 폴더가 아닌 경우 파일들 처리
+      if (!folderFound && fileHandles.length > 0) {
+        resizeFiles = [];
+        resizeDirHandle = null;
+        await loadResizeFiles(fileHandles);
+      }
     });
 
     document.getElementById('resizeSelectFolderBtn').addEventListener('click', selectResizeFolder);
+    document.getElementById('resizeSelectFilesBtn').addEventListener('click', selectResizeFiles);
+    document.getElementById('resizeAddFilesBtn').addEventListener('click', addResizeFiles);
 
     async function selectResizeFolder() {
       try {
@@ -2826,6 +2848,108 @@
         await loadResizeFolder(dirHandle);
       } catch (err) {
         if (err.name !== 'AbortError') console.error('폴더 선택 오류:', err);
+      }
+    }
+
+    async function selectResizeFiles() {
+      try {
+        const handles = await window.showOpenFilePicker({
+          multiple: true,
+          types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }]
+        });
+        resizeFiles = [];
+        resizeDirHandle = null;
+        await loadResizeFiles(handles);
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('파일 선택 오류:', err);
+      }
+    }
+
+    async function addResizeFiles() {
+      try {
+        const handles = await window.showOpenFilePicker({
+          multiple: true,
+          types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }]
+        });
+        await loadResizeFiles(handles, true);
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('파일 추가 오류:', err);
+      }
+    }
+
+    async function loadResizeFiles(handles, isAdding = false) {
+      if (!isAdding) {
+        resizeOriginalFolderName = '선택파일';
+        document.getElementById('resizeFolderName').textContent = `선택파일_지수변경`;
+        document.getElementById('resizeFolderBadge').style.display = 'inline';
+      }
+      document.getElementById('resizeFileCount').textContent = '파일 로딩 중...';
+
+      for (const handle of handles) {
+        try {
+          const file = await handle.getFile();
+          const name = file.name.toLowerCase();
+          if (!name.endsWith('.jpg') && !name.endsWith('.jpeg') && !name.endsWith('.png')) continue;
+
+          // 중복 체크
+          if (resizeFiles.some(f => f.name === file.name && f.file.size === file.size)) continue;
+
+          const arrayBuffer = await file.arrayBuffer();
+          const dpi = extractDPIFromJPEG(arrayBuffer);
+
+          const img = await new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = () => resolve(null);
+            image.src = URL.createObjectURL(file);
+          });
+
+          if (img) {
+            const widthInch = (img.width / dpi).toFixed(2);
+            const heightInch = (img.height / dpi).toFixed(2);
+            resizeFiles.push({
+              name: file.name,
+              file: file,
+              handle: handle,
+              width: img.width,
+              height: img.height,
+              dpi: dpi,
+              widthInch: widthInch,
+              heightInch: heightInch,
+              url: img.src
+            });
+          }
+        } catch (fileErr) {
+          console.error('파일 로드 오류:', fileErr);
+        }
+      }
+
+      resizeFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
+      document.getElementById('resizeFileCount').textContent = `${resizeFiles.length}개 파일 선택됨`;
+
+      if (resizeFiles.length > 0) {
+        renderResizeFileList();
+        document.getElementById('resizePreviewSection').classList.add('show');
+        document.getElementById('resizeBtn').disabled = false;
+        document.getElementById('resizeAddFilesBtn').style.display = 'inline-block';
+
+        // 첫 번째 파일의 사이즈로 기본값 설정
+        const first = resizeFiles[0];
+        resizeOriginalWidth = parseFloat(first.widthInch);
+        resizeOriginalHeight = parseFloat(first.heightInch);
+        resizeAspectRatio = resizeOriginalWidth / resizeOriginalHeight;
+
+        document.getElementById('resizeNewWidth').value = first.widthInch;
+        document.getElementById('resizeNewHeight').value = first.heightInch;
+        document.getElementById('resizeNewDPI').value = first.dpi;
+
+        document.getElementById('resizeOriginalSize').textContent = `${first.widthInch}" × ${first.heightInch}"`;
+        document.getElementById('resizeOriginalRatio').textContent = `(비율: ${resizeAspectRatio.toFixed(3)})`;
+
+        updateResizeResultPixels();
+        smoothScrollToBottom(800);
+      } else {
+        alert('선택한 파일 중 JPG, PNG 이미지가 없습니다.');
       }
     }
 
