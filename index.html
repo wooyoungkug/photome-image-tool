@@ -930,6 +930,13 @@
             <h3 class="golden-text">PDF 만들기</h3>
             <p>JPG 이미지들을 PDF로 변환<br>드래그로 순서 변경</p>
           </div>
+
+          <!-- 해상도/사이즈 조절 -->
+          <div class="menu-card" onclick="showTool('resize')">
+            <div class="icon">📐</div>
+            <h3 class="golden-text">해상도 · 사이즈 조절</h3>
+            <p>이미지 해상도(DPI)와<br>사이즈(인치) 일괄 변경</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1267,6 +1274,86 @@
       <div class="save-notification" id="pdfSaveNotification">✓ PDF 생성 완료!</div>
     </div>
 
+    <!-- ========== 해상도/사이즈 조절 ========== -->
+    <div class="tool-section" id="resizeTool">
+      <button class="back-btn" onclick="showMenu()">← 메뉴로 돌아가기</button>
+
+      <div class="glass-card">
+        <h2 class="section-title">📐 해상도 · 사이즈 조절</h2>
+
+        <div class="folder-setting">
+          <span class="folder-icon">📁</span>
+          <div class="folder-info">
+            <div class="folder-label">저장 위치</div>
+            <div class="folder-name" id="resizeFolderName">폴더 선택 시 자동 설정</div>
+          </div>
+          <span class="auto-save-badge" id="resizeFolderBadge" style="display: none;">✓ 저장 폴더 설정됨</span>
+        </div>
+
+        <div class="upload-zone" id="resizeUploadZone">
+          <div class="upload-icon">📂</div>
+          <h3>폴더를 드래그하거나 클릭하여 선택</h3>
+          <span>JPG, PNG 이미지 폴더 · 해상도/사이즈 일괄 변경</span>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: center; margin-top: 18px;">
+          <button class="btn-secondary" id="resizeSelectFolderBtn">📂 폴더 선택</button>
+        </div>
+
+        <div style="text-align: center; margin-top: 18px;">
+          <span class="file-count-badge" id="resizeFileCount">0개 파일 선택됨</span>
+        </div>
+      </div>
+
+      <div class="glass-card preview-section" id="resizePreviewSection">
+        <h2 class="section-title">📋 이미지 목록</h2>
+
+        <div class="resize-file-list" id="resizeFileList" style="max-height: 300px; overflow-y: auto; margin-bottom: 20px;"></div>
+
+        <h2 class="section-title" style="margin-top: 30px;">⚙️ 변경 설정</h2>
+
+        <div class="option-box">
+          <div class="option-group">
+            <label>📏 새 사이즈 (인치):</label>
+            <div style="display: flex; gap: 10px; align-items: center;">
+              <input type="number" id="resizeNewWidth" placeholder="가로" step="0.1" min="0.1" style="width: 80px;">
+              <span style="color: rgba(255,255,255,0.5);">×</span>
+              <input type="number" id="resizeNewHeight" placeholder="세로" step="0.1" min="0.1" style="width: 80px;">
+              <span style="color: rgba(255,255,255,0.5);">인치</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="option-box">
+          <div class="option-group">
+            <label>🔍 해상도 (DPI):</label>
+            <input type="number" id="resizeNewDPI" value="300" min="72" max="1200" step="1" style="width: 100px;">
+            <span style="color: rgba(255,255,255,0.5);">픽셀/인치</span>
+          </div>
+        </div>
+
+        <div class="option-box">
+          <div class="option-group">
+            <label>📄 결과 픽셀:</label>
+            <span id="resizeResultPixels" style="color: #f4d03f; font-weight: 600;">- × - px</span>
+          </div>
+        </div>
+
+        <div class="progress-section" id="resizeProgress" style="display: none;">
+          <div class="progress-bar-container">
+            <div class="progress-bar" id="resizeProgressBar"></div>
+          </div>
+          <div class="progress-text" id="resizeProgressText">0 / 0 이미지 처리 완료</div>
+        </div>
+
+        <div class="btn-container" style="margin-top: 25px;">
+          <button class="btn-primary" id="resizeBtn" disabled>📐 사이즈 변경 + 저장</button>
+        </div>
+      </div>
+
+      <div class="save-notification" id="resizeSaveNotification">✓ 사이즈 변경 완료!</div>
+    </div>
+
     <!-- 푸터 -->
     <div class="footer">
       <p style="margin-bottom: 8px; font-size: 13px;">성남시 중원구 둔촌대로560 변산테크노벨리 310,311,312호</p>
@@ -1316,6 +1403,7 @@
       resetExtendTool();
       resetMergeTool();
       resetPdfTool();
+      resetResizeTool();
     }
 
     function showTool(tool) {
@@ -1329,7 +1417,8 @@
         'split': '첫장막장 분리',
         'extend': '첫장막장 늘리기',
         'merge': 'JPG 좌우합치기',
-        'pdf': 'PDF 만들기'
+        'pdf': 'PDF 만들기',
+        'resize': '해상도사이즈 조절'
       };
       trackFeatureUsage(toolNames[tool] || tool, 'tool_selected');
     }
@@ -2526,6 +2615,257 @@
 
       document.getElementById('pdfBtn').disabled = false;
       document.getElementById('pdfBtn').innerHTML = '📄 PDF 생성';
+    });
+
+    // ========== 해상도/사이즈 조절 도구 ==========
+    let resizeFiles = [];
+    let resizeDirHandle = null;
+    let resizeOriginalFolderName = '';
+
+    function resetResizeTool() {
+      resizeFiles = [];
+      resizeDirHandle = null;
+      resizeOriginalFolderName = '';
+      document.getElementById('resizeFileList').innerHTML = '';
+      document.getElementById('resizeFileCount').textContent = '0개 파일 선택됨';
+      document.getElementById('resizePreviewSection').classList.remove('show');
+      document.getElementById('resizeProgress').style.display = 'none';
+      document.getElementById('resizeSaveNotification').classList.remove('show');
+      document.getElementById('resizeBtn').disabled = true;
+      document.getElementById('resizeFolderName').textContent = '폴더 선택 시 자동 설정';
+      document.getElementById('resizeFolderBadge').style.display = 'none';
+      document.getElementById('resizeNewWidth').value = '';
+      document.getElementById('resizeNewHeight').value = '';
+      document.getElementById('resizeNewDPI').value = '300';
+      document.getElementById('resizeResultPixels').textContent = '- × - px';
+    }
+
+    const resizeUploadZone = document.getElementById('resizeUploadZone');
+
+    resizeUploadZone.addEventListener('dragover', (e) => { e.preventDefault(); resizeUploadZone.classList.add('dragover'); });
+    resizeUploadZone.addEventListener('dragleave', () => resizeUploadZone.classList.remove('dragover'));
+    resizeUploadZone.addEventListener('click', () => selectResizeFolder());
+    resizeUploadZone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      resizeUploadZone.classList.remove('dragover');
+      const items = e.dataTransfer.items;
+      if (items && items.length > 0) {
+        for (let i = 0; i < items.length; i++) {
+          const item = items[i];
+          if (item.kind === 'file') {
+            try {
+              const handle = await item.getAsFileSystemHandle();
+              if (handle && handle.kind === 'directory') {
+                await loadResizeFolder(handle);
+                break;
+              }
+            } catch (err) {
+              console.error('폴더 드롭 오류:', err);
+            }
+          }
+        }
+      }
+    });
+
+    document.getElementById('resizeSelectFolderBtn').addEventListener('click', selectResizeFolder);
+
+    async function selectResizeFolder() {
+      try {
+        const dirHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+        await loadResizeFolder(dirHandle);
+      } catch (err) {
+        if (err.name !== 'AbortError') console.error('폴더 선택 오류:', err);
+      }
+    }
+
+    async function loadResizeFolder(dirHandle) {
+      resizeDirHandle = dirHandle;
+      resizeOriginalFolderName = dirHandle.name;
+      resizeFiles = [];
+
+      for await (const entry of dirHandle.values()) {
+        if (entry.kind === 'file') {
+          const name = entry.name.toLowerCase();
+          if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+            const file = await entry.getFile();
+            const arrayBuffer = await file.arrayBuffer();
+            const dpi = extractDPIFromJPEG(arrayBuffer);
+
+            const img = await new Promise((resolve) => {
+              const image = new Image();
+              image.onload = () => resolve(image);
+              image.onerror = () => resolve(null);
+              image.src = URL.createObjectURL(file);
+            });
+
+            if (img) {
+              const widthInch = (img.width / dpi).toFixed(2);
+              const heightInch = (img.height / dpi).toFixed(2);
+              resizeFiles.push({
+                name: entry.name,
+                file: file,
+                handle: entry,
+                width: img.width,
+                height: img.height,
+                dpi: dpi,
+                widthInch: widthInch,
+                heightInch: heightInch,
+                url: img.src
+              });
+            }
+          }
+        }
+      }
+
+      resizeFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
+
+      document.getElementById('resizeFolderName').textContent = `${resizeOriginalFolderName}_지수변경`;
+      document.getElementById('resizeFolderBadge').style.display = 'inline';
+      document.getElementById('resizeFileCount').textContent = `${resizeFiles.length}개 파일 선택됨`;
+
+      if (resizeFiles.length > 0) {
+        renderResizeFileList();
+        document.getElementById('resizePreviewSection').classList.add('show');
+        document.getElementById('resizeBtn').disabled = false;
+
+        // 첫 번째 파일의 사이즈로 기본값 설정
+        const first = resizeFiles[0];
+        document.getElementById('resizeNewWidth').value = first.widthInch;
+        document.getElementById('resizeNewHeight').value = first.heightInch;
+        document.getElementById('resizeNewDPI').value = first.dpi;
+        updateResizeResultPixels();
+
+        smoothScrollToBottom(800);
+      }
+    }
+
+    function renderResizeFileList() {
+      const list = document.getElementById('resizeFileList');
+      list.innerHTML = '';
+
+      resizeFiles.forEach((item, index) => {
+        const div = document.createElement('div');
+        div.className = 'pdf-file-item';
+        div.innerHTML = `
+          <span class="file-order">${index + 1}</span>
+          <img class="file-thumb" src="${item.url}" alt="${item.name}">
+          <div class="file-info">
+            <div class="file-name">${item.name}</div>
+            <div class="file-size">${item.width} × ${item.height} px</div>
+            <div class="file-dimensions">${item.widthInch}" × ${item.heightInch}" @ ${item.dpi} DPI</div>
+          </div>
+        `;
+        list.appendChild(div);
+      });
+    }
+
+    // 결과 픽셀 계산 업데이트
+    function updateResizeResultPixels() {
+      const widthInch = parseFloat(document.getElementById('resizeNewWidth').value) || 0;
+      const heightInch = parseFloat(document.getElementById('resizeNewHeight').value) || 0;
+      const dpi = parseInt(document.getElementById('resizeNewDPI').value) || 300;
+
+      const widthPx = Math.round(widthInch * dpi);
+      const heightPx = Math.round(heightInch * dpi);
+
+      document.getElementById('resizeResultPixels').textContent = `${widthPx} × ${heightPx} px`;
+    }
+
+    document.getElementById('resizeNewWidth').addEventListener('input', updateResizeResultPixels);
+    document.getElementById('resizeNewHeight').addEventListener('input', updateResizeResultPixels);
+    document.getElementById('resizeNewDPI').addEventListener('input', updateResizeResultPixels);
+
+    // 사이즈 변경 실행
+    document.getElementById('resizeBtn').addEventListener('click', async () => {
+      if (resizeFiles.length === 0 || !resizeDirHandle) return;
+
+      const widthInch = parseFloat(document.getElementById('resizeNewWidth').value);
+      const heightInch = parseFloat(document.getElementById('resizeNewHeight').value);
+      const dpi = parseInt(document.getElementById('resizeNewDPI').value);
+
+      if (!widthInch || !heightInch || !dpi) {
+        alert('사이즈와 해상도를 입력해주세요.');
+        return;
+      }
+
+      const newWidthPx = Math.round(widthInch * dpi);
+      const newHeightPx = Math.round(heightInch * dpi);
+
+      document.getElementById('resizeBtn').disabled = true;
+      document.getElementById('resizeBtn').innerHTML = '⏳ 처리 중...';
+      document.getElementById('resizeProgress').style.display = 'block';
+      document.getElementById('resizeProgressBar').style.width = '0%';
+      document.getElementById('resizeProgressText').textContent = `0 / ${resizeFiles.length} 이미지 처리 완료`;
+
+      try {
+        // 상위 폴더에 새 폴더 생성
+        const parentHandle = resizeDirHandle;
+        const newFolderName = `${resizeOriginalFolderName}_지수변경`;
+
+        let outputDirHandle;
+        try {
+          outputDirHandle = await parentHandle.getDirectoryHandle(newFolderName, { create: true });
+        } catch (err) {
+          // 상위 폴더 접근이 안되면 다운로드 방식 사용
+          console.log('폴더 생성 불가, 다운로드 방식 사용');
+        }
+
+        let processedCount = 0;
+        for (const item of resizeFiles) {
+          const img = await new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.src = item.url;
+          });
+
+          const canvas = document.createElement('canvas');
+          canvas.width = newWidthPx;
+          canvas.height = newHeightPx;
+          const ctx = canvas.getContext('2d');
+          ctx.fillStyle = '#FFFFFF';
+          ctx.fillRect(0, 0, newWidthPx, newHeightPx);
+          ctx.drawImage(img, 0, 0, newWidthPx, newHeightPx);
+
+          const { blob } = await canvasToJPEGWithDPI(canvas, dpi, 0.95);
+
+          if (outputDirHandle) {
+            const fileHandle = await outputDirHandle.getFileHandle(item.name, { create: true });
+            const writable = await fileHandle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+          } else {
+            fallbackDownload(blob, item.name);
+          }
+
+          processedCount++;
+          document.getElementById('resizeProgressBar').style.width = `${(processedCount / resizeFiles.length) * 100}%`;
+          document.getElementById('resizeProgressText').textContent = `${processedCount} / ${resizeFiles.length} 이미지 처리 완료`;
+        }
+
+        document.getElementById('resizeSaveNotification').innerHTML = `✓ 사이즈 변경 완료!<br><small style="font-weight: 400;">${resizeFiles.length}개 파일 → ${newFolderName} 폴더에 저장됨</small>`;
+        document.getElementById('resizeSaveNotification').classList.add('show');
+        setTimeout(() => document.getElementById('resizeSaveNotification').classList.remove('show'), 5000);
+
+        // Google Analytics 추적
+        trackFeatureUsage('해상도사이즈 조절', 'resize_completed');
+        gtag('event', 'resize_stats', {
+          'event_category': 'Feature Usage',
+          'file_count': resizeFiles.length,
+          'new_width_inch': widthInch,
+          'new_height_inch': heightInch,
+          'new_dpi': dpi
+        });
+
+        // 상단으로 스크롤
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 300);
+
+      } catch (err) {
+        console.error('사이즈 변경 오류:', err);
+        alert('사이즈 변경 오류: ' + err.message);
+      }
+
+      document.getElementById('resizeBtn').disabled = false;
+      document.getElementById('resizeBtn').innerHTML = '📐 사이즈 변경 + 저장';
     });
   </script>
 </body>
