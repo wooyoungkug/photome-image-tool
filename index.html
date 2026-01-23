@@ -1674,6 +1674,8 @@
       document.getElementById('splitResultSection').classList.add('show');
       btn.disabled = false;
       btn.innerHTML = '✂️ 분리 + 자동 저장';
+      // 분리 완료 후 상단으로 스크롤
+      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 300);
     });
 
     document.getElementById('downloadLeft').addEventListener('click', () => {
