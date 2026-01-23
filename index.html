@@ -2913,31 +2913,111 @@
     }
 
     async function selectResizeFiles() {
-      try {
-        const handles = await window.showOpenFilePicker({
-          multiple: true,
-          types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }]
-        });
-        resizeFiles = [];
-        resizeDirHandle = null;
-        await loadResizeFiles(handles);
-      } catch (err) {
-        if (err.name !== 'AbortError') console.error('파일 선택 오류:', err);
-      }
+      // File input 방식 사용 (더 안정적)
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.accept = 'image/jpeg,image/png';
+      input.onchange = async (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          resizeFiles = [];
+          resizeDirHandle = null;
+          await loadResizeFilesFromInput(files);
+        }
+      };
+      input.click();
     }
 
     async function addResizeFiles() {
-      try {
-        const handles = await window.showOpenFilePicker({
-          multiple: true,
-          types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }]
-        });
-        await loadResizeFiles(handles, true);
-      } catch (err) {
-        if (err.name !== 'AbortError') console.error('파일 추가 오류:', err);
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.multiple = true;
+      input.accept = 'image/jpeg,image/png';
+      input.onchange = async (e) => {
+        const files = Array.from(e.target.files);
+        if (files.length > 0) {
+          await loadResizeFilesFromInput(files, true);
+        }
+      };
+      input.click();
+    }
+
+    async function loadResizeFilesFromInput(files, isAdding = false) {
+      if (!isAdding) {
+        resizeOriginalFolderName = '선택파일';
+        document.getElementById('resizeFolderName').textContent = `선택파일_지수변경`;
+        document.getElementById('resizeFolderBadge').style.display = 'inline';
+      }
+      document.getElementById('resizeFileCount').textContent = `파일 로딩 중... (${files.length}개)`;
+
+      for (const file of files) {
+        try {
+          const name = file.name.toLowerCase();
+          if (!name.endsWith('.jpg') && !name.endsWith('.jpeg') && !name.endsWith('.png')) continue;
+
+          // 중복 체크
+          if (resizeFiles.some(f => f.name === file.name && f.file.size === file.size)) continue;
+
+          const arrayBuffer = await file.arrayBuffer();
+          const dpi = extractDPIFromJPEG(arrayBuffer);
+
+          const img = await new Promise((resolve) => {
+            const image = new Image();
+            image.onload = () => resolve(image);
+            image.onerror = () => resolve(null);
+            image.src = URL.createObjectURL(file);
+          });
+
+          if (img) {
+            const widthInch = (img.width / dpi).toFixed(2);
+            const heightInch = (img.height / dpi).toFixed(2);
+            resizeFiles.push({
+              name: file.name,
+              file: file,
+              handle: null,
+              width: img.width,
+              height: img.height,
+              dpi: dpi,
+              widthInch: widthInch,
+              heightInch: heightInch,
+              url: img.src
+            });
+          }
+        } catch (fileErr) {
+          console.error('파일 로드 오류:', file.name, fileErr);
+        }
+      }
+
+      resizeFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
+      document.getElementById('resizeFileCount').textContent = `${resizeFiles.length}개 파일 선택됨`;
+
+      if (resizeFiles.length > 0) {
+        renderResizeFileList();
+        document.getElementById('resizePreviewSection').classList.add('show');
+        document.getElementById('resizeBtn').disabled = false;
+        document.getElementById('resizeAddFilesBtn').style.display = 'inline-block';
+
+        const first = resizeFiles[0];
+        resizeOriginalWidth = parseFloat(first.widthInch);
+        resizeOriginalHeight = parseFloat(first.heightInch);
+        resizeAspectRatio = resizeOriginalWidth / resizeOriginalHeight;
+
+        document.getElementById('resizeNewWidth').value = first.widthInch;
+        document.getElementById('resizeNewHeight').value = first.heightInch;
+        document.getElementById('resizeNewDPI').value = first.dpi;
+
+        document.getElementById('resizeOriginalSize').textContent = `${first.widthInch}" × ${first.heightInch}"`;
+        document.getElementById('resizeOriginalRatio').textContent = `(비율: ${resizeAspectRatio.toFixed(3)})`;
+
+        updateResizeResultPixels();
+        smoothScrollToBottom(800);
+      } else {
+        alert('선택한 파일 중 JPG, PNG 이미지가 없습니다.');
       }
     }
 
+    // File System Access API 버전 (폴더용)
     async function loadResizeFiles(handles, isAdding = false) {
       if (!isAdding) {
         resizeOriginalFolderName = '선택파일';
