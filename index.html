@@ -2683,44 +2683,56 @@
       resizeOriginalFolderName = dirHandle.name;
       resizeFiles = [];
 
-      for await (const entry of dirHandle.values()) {
-        if (entry.kind === 'file') {
-          const name = entry.name.toLowerCase();
-          if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
-            const file = await entry.getFile();
-            const arrayBuffer = await file.arrayBuffer();
-            const dpi = extractDPIFromJPEG(arrayBuffer);
+      // 폴더 이름 먼저 표시
+      document.getElementById('resizeFolderName').textContent = `${resizeOriginalFolderName}_지수변경`;
+      document.getElementById('resizeFolderBadge').style.display = 'inline';
+      document.getElementById('resizeFileCount').textContent = '파일 로딩 중...';
 
-            const img = await new Promise((resolve) => {
-              const image = new Image();
-              image.onload = () => resolve(image);
-              image.onerror = () => resolve(null);
-              image.src = URL.createObjectURL(file);
-            });
+      try {
+        for await (const entry of dirHandle.values()) {
+          if (entry.kind === 'file') {
+            const name = entry.name.toLowerCase();
+            if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+              try {
+                const file = await entry.getFile();
+                const arrayBuffer = await file.arrayBuffer();
+                const dpi = extractDPIFromJPEG(arrayBuffer);
 
-            if (img) {
-              const widthInch = (img.width / dpi).toFixed(2);
-              const heightInch = (img.height / dpi).toFixed(2);
-              resizeFiles.push({
-                name: entry.name,
-                file: file,
-                handle: entry,
-                width: img.width,
-                height: img.height,
-                dpi: dpi,
-                widthInch: widthInch,
-                heightInch: heightInch,
-                url: img.src
-              });
+                const img = await new Promise((resolve) => {
+                  const image = new Image();
+                  image.onload = () => resolve(image);
+                  image.onerror = () => resolve(null);
+                  image.src = URL.createObjectURL(file);
+                });
+
+                if (img) {
+                  const widthInch = (img.width / dpi).toFixed(2);
+                  const heightInch = (img.height / dpi).toFixed(2);
+                  resizeFiles.push({
+                    name: entry.name,
+                    file: file,
+                    handle: entry,
+                    width: img.width,
+                    height: img.height,
+                    dpi: dpi,
+                    widthInch: widthInch,
+                    heightInch: heightInch,
+                    url: img.src
+                  });
+                }
+              } catch (fileErr) {
+                console.error('파일 로드 오류:', entry.name, fileErr);
+              }
             }
           }
         }
+      } catch (err) {
+        console.error('폴더 읽기 오류:', err);
+        alert('폴더 읽기 오류: ' + err.message);
       }
 
       resizeFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
 
-      document.getElementById('resizeFolderName').textContent = `${resizeOriginalFolderName}_지수변경`;
-      document.getElementById('resizeFolderBadge').style.display = 'inline';
       document.getElementById('resizeFileCount').textContent = `${resizeFiles.length}개 파일 선택됨`;
 
       if (resizeFiles.length > 0) {
@@ -2736,6 +2748,8 @@
         updateResizeResultPixels();
 
         smoothScrollToBottom(800);
+      } else {
+        alert('폴더에 JPG, PNG 이미지 파일이 없습니다.');
       }
     }
 
