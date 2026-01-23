@@ -1274,6 +1274,10 @@
         <span style="margin-right: 20px;">🌐 photome5478.naver.com</span>
         <span>📞 1800-7682</span>
       </p>
+      <div style="margin-top: 20px; padding: 12px 20px; background: rgba(255,255,255,0.05); border-radius: 10px; display: inline-block;">
+        <span style="font-size: 12px; color: rgba(255,255,255,0.6);">👥 방문자수</span>
+        <img src="https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fwooyoungkug.github.io%2Fphotome-image-tool&count_bg=%23D4AF37&title_bg=%231A1A2E&icon=&icon_color=%23E7E7E7&title=today%2Ftotal&edge_flat=true" alt="방문자수" style="vertical-align: middle; margin-left: 8px;">
+      </div>
       <p style="margin-top: 15px; font-size: 11px; opacity: 0.6;">PHOTO美 · Image Tools v5.0</p>
     </div>
   </div>
@@ -1328,6 +1332,29 @@
         'pdf': 'PDF 만들기'
       };
       trackFeatureUsage(toolNames[tool] || tool, 'tool_selected');
+    }
+
+    // ========== 부드러운 스크롤 함수 ==========
+    function smoothScrollToBottom(duration = 800) {
+      const start = window.pageYOffset;
+      const target = document.body.scrollHeight - window.innerHeight;
+      const distance = target - start;
+      let startTime = null;
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        // easeInOutCubic for smooth effect
+        const ease = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        window.scrollTo(0, start + distance * ease);
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      requestAnimationFrame(animation);
     }
 
     // ========== 공통 함수 ==========
@@ -1570,6 +1597,8 @@
         document.getElementById('splitImageInfo').classList.add('show');
         document.getElementById('originalPreview').src = imageUrl;
         document.getElementById('splitPreviewSection').classList.add('show');
+        // 맨 아래로 부드럽게 스크롤 (800ms)
+        setTimeout(() => smoothScrollToBottom(800), 150);
       };
       img.src = imageUrl;
     }
@@ -1797,10 +1826,8 @@
         document.getElementById('extendImageInfo').classList.add('show');
         document.getElementById('extendOriginalPreview').src = imageUrl;
         document.getElementById('extendPreviewSection').classList.add('show');
-        // 맨 아래로 스크롤
-        setTimeout(() => {
-          window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
-        }, 100);
+        // 맨 아래로 부드럽게 스크롤 (800ms)
+        setTimeout(() => smoothScrollToBottom(800), 150);
       };
       img.src = imageUrl;
     }
