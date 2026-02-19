@@ -389,6 +389,26 @@
       border-color: rgba(255, 255, 255, 0.4);
     }
 
+    .btn-close-preview {
+      display: block;
+      margin: 20px auto 0;
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255,255,255,0.6);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 10px 30px;
+      font-size: 13px;
+      font-weight: 500;
+      border-radius: 25px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .btn-close-preview:hover {
+      background: rgba(244, 67, 54, 0.15);
+      border-color: rgba(244, 67, 54, 0.4);
+      color: #ef5350;
+    }
+
     .result-section {
       display: none;
     }
@@ -741,114 +761,268 @@
       background: rgba(244, 67, 54, 0.4);
     }
 
-    /* 리사이즈 파일 그리드 (3열) */
+    /* 리사이즈 파일 컨테이너 */
     .resize-file-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 16px;
+      background: linear-gradient(145deg, rgba(30,30,40,0.9), rgba(20,20,30,0.95));
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* 전체 요약 카드 */
+    .resize-summary-card {
+      background: linear-gradient(135deg, rgba(212,175,55,0.15), rgba(212,175,55,0.05));
+      border: 1px solid rgba(212,175,55,0.3);
+      border-radius: 14px;
+      padding: 18px 20px;
+    }
+
+    .resize-summary-header {
+      display: flex;
+      align-items: center;
       gap: 12px;
-      max-height: 350px;
-      overflow-y: auto;
-      padding: 10px;
-      background: rgba(0,0,0,0.2);
+      margin-bottom: 14px;
+    }
+
+    .resize-summary-icon {
+      width: 42px;
+      height: 42px;
+      background: linear-gradient(135deg, #d4af37, #b8860b);
       border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 4px 12px rgba(212,175,55,0.3);
     }
 
-    .resize-file-card {
-      background: rgba(255,255,255,0.05);
+    .resize-summary-title {
+      flex: 1;
+    }
+
+    .resize-summary-title h3 {
+      margin: 0;
+      font-size: 15px;
+      font-weight: 600;
+      color: #fff;
+    }
+
+    .resize-summary-title p {
+      margin: 4px 0 0 0;
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+    }
+
+    .resize-summary-stats {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .resize-stat-item {
+      background: rgba(0,0,0,0.3);
       border-radius: 10px;
-      padding: 10px;
-      text-align: center;
-      transition: all 0.3s ease;
-      border: 1px solid rgba(255,255,255,0.1);
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+      min-width: 120px;
     }
 
-    .resize-file-card:hover {
-      background: rgba(255,255,255,0.1);
-      border-color: rgba(212, 175, 55, 0.3);
+    .resize-stat-item .stat-icon {
+      font-size: 18px;
     }
 
-    .resize-file-card img {
-      width: 100%;
-      height: 80px;
-      object-fit: cover;
-      border-radius: 6px;
-      margin-bottom: 8px;
+    .resize-stat-item .stat-info {
+      display: flex;
+      flex-direction: column;
     }
 
-    .resize-file-card .file-name {
-      font-size: 11px;
-      font-weight: 500;
-      margin-bottom: 4px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
+    .resize-stat-item .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #d4af37;
     }
 
-    .resize-file-card .file-detail {
+    .resize-stat-item .stat-label {
       font-size: 10px;
       color: rgba(255,255,255,0.5);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* 폴더 그룹 */
+    .resize-folder-group {
+      background: rgba(255,255,255,0.03);
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+
+    .resize-folder-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      background: rgba(255,255,255,0.05);
+      cursor: pointer;
+      transition: background 0.2s ease;
+      user-select: none;
+    }
+
+    .resize-folder-header:hover {
+      background: rgba(255,255,255,0.08);
+    }
+
+    .resize-folder-header .folder-icon {
+      font-size: 16px;
+    }
+
+    .resize-folder-header .folder-name {
+      flex: 1;
+      font-size: 13px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      word-break: break-all;
       line-height: 1.4;
     }
 
-    /* 다른 사이즈 파일 강조 */
-    .resize-file-card.different-size {
-      border: 2px solid rgba(255, 152, 0, 0.6);
-      background: rgba(255, 152, 0, 0.1);
-      position: relative;
+    .resize-folder-header .folder-count {
+      background: rgba(212,175,55,0.2);
+      color: #d4af37;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 4px 10px;
+      border-radius: 12px;
     }
 
-    .resize-file-card .different-badge {
-      position: absolute;
-      top: -8px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(255, 152, 0, 0.9);
-      color: #fff;
-      font-size: 9px;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 10px;
+    .resize-folder-header .folder-toggle {
+      font-size: 12px;
+      color: rgba(255,255,255,0.4);
+      transition: transform 0.3s ease;
+    }
+
+    .resize-folder-group.collapsed .folder-toggle {
+      transform: rotate(-90deg);
+    }
+
+    .resize-folder-content {
+      max-height: 1000px;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+    }
+
+    .resize-folder-group.collapsed .resize-folder-content {
+      max-height: 0;
+    }
+
+    /* 파일 목록 */
+    .resize-file-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      padding: 8px;
+      background: rgba(0,0,0,0.2);
+    }
+
+    .resize-file-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.02);
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .resize-file-item:hover {
+      background: rgba(255,255,255,0.06);
+    }
+
+    .resize-file-item .file-thumb {
+      width: 40px;
+      height: 40px;
+      border-radius: 6px;
+      object-fit: cover;
+      flex-shrink: 0;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .resize-file-item .file-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .resize-file-item .file-name {
+      font-size: 12px;
+      font-weight: 500;
+      color: rgba(255,255,255,0.9);
+      word-break: break-all;
+      line-height: 1.4;
+      margin-bottom: 2px;
+    }
+
+    .resize-file-item .file-meta {
+      font-size: 10px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    .resize-file-item .file-size-badge {
+      font-size: 10px;
+      padding: 3px 8px;
+      border-radius: 6px;
+      background: rgba(100,181,246,0.15);
+      color: #64b5f6;
       white-space: nowrap;
     }
 
+    .resize-file-item.different-size .file-size-badge {
+      background: rgba(255,152,0,0.2);
+      color: #ffb74d;
+    }
+
     /* 사이즈 분포 요약 */
-    .resize-size-summary {
-      grid-column: 1 / -1;
-      background: rgba(0,0,0,0.3);
-      border-radius: 10px;
-      padding: 12px 15px;
-      margin-bottom: 10px;
-    }
-
-    .resize-size-summary .summary-title {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: rgba(255,255,255,0.8);
-      margin-bottom: 8px;
-    }
-
-    .resize-size-summary .summary-items {
+    .resize-size-distribution {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
+      padding: 12px 16px;
+      background: rgba(0,0,0,0.2);
+      border-top: 1px solid rgba(255,255,255,0.05);
     }
 
-    .resize-size-summary .summary-item {
+    .resize-size-tag {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
-      padding: 4px 10px;
-      border-radius: 15px;
-      background: rgba(255,255,255,0.1);
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: rgba(255,255,255,0.08);
+      color: rgba(255,255,255,0.7);
     }
 
-    .resize-size-summary .summary-item.main {
-      background: rgba(76, 175, 80, 0.3);
+    .resize-size-tag.main {
+      background: rgba(76,175,80,0.2);
       color: #81c784;
+      border: 1px solid rgba(76,175,80,0.3);
     }
 
-    .resize-size-summary .summary-item.different {
-      background: rgba(255, 152, 0, 0.3);
+    .resize-size-tag.different {
+      background: rgba(255,152,0,0.15);
       color: #ffb74d;
+      border: 1px solid rgba(255,152,0,0.3);
+    }
+
+    .resize-size-tag .tag-count {
+      background: rgba(0,0,0,0.3);
+      padding: 2px 6px;
+      border-radius: 8px;
+      font-weight: 600;
     }
 
     /* 즐겨찾기 프리셋 */
@@ -1094,6 +1268,20 @@
             <h3 class="golden-text">해상도 · 사이즈 조절</h3>
             <p>이미지 해상도(DPI)와<br>사이즈(인치) 일괄 변경</p>
           </div>
+
+          <!-- 비율 계산기 -->
+          <div class="menu-card" onclick="showTool('ratio')">
+            <div class="icon">🧮</div>
+            <h3 class="golden-text">비율 계산기</h3>
+            <p>엑셀 공식으로 비율 계산<br>가로↔세로 자동 변환</p>
+          </div>
+
+          <!-- 이미지 반으로 자르기 -->
+          <div class="menu-card" onclick="showTool('cut')">
+            <div class="icon">🔪</div>
+            <h3 class="golden-text">이미지 반으로 자르기</h3>
+            <p>이미지를 정확히 반으로 자르기<br>왼쪽(+L) · 오른쪽(+R) 저장</p>
+          </div>
         </div>
       </div>
     </div>
@@ -1153,8 +1341,9 @@
           <img id="originalPreview" src="" alt="원본">
         </div>
         <div class="btn-container">
-          <button class="btn-primary" id="splitBtn">✂️ 분리 + 자동 저장</button>
+          <button class="btn-primary" id="splitBtn">✂️ 분리</button>
         </div>
+        <button class="btn-close-preview" onclick="resetSplitTool(); smoothScrollToTop(500);">✕ 닫기</button>
       </div>
 
       <div class="save-notification" id="splitSaveNotification">✓ 저장 완료!</div>
@@ -1169,7 +1358,7 @@
             </div>
             <div class="card-body"><img id="leftPreview" src="" alt="첫장"></div>
             <div class="card-footer">
-              <button class="btn-download" id="downloadLeft">💾 첫장 다운로드</button>
+              <button class="btn-download" id="downloadLeft">💾 첫장 저장</button>
             </div>
           </div>
           <div class="preview-card">
@@ -1179,15 +1368,16 @@
             </div>
             <div class="card-body"><img id="rightPreview" src="" alt="막장"></div>
             <div class="card-footer">
-              <button class="btn-download" id="downloadRight">💾 막장 다운로드</button>
+              <button class="btn-download" id="downloadRight">💾 막장 저장</button>
             </div>
           </div>
         </div>
         <div class="download-all">
           <p id="resultSizeInfo">출력 크기: -</p>
           <p id="fileNames">파일명: 첫장.jpg, 막장.jpg</p>
-          <button class="btn-download" id="downloadBoth" style="margin-top: 12px;">📦 둘다 다운로드</button>
+          <button class="btn-primary" id="saveBothBtn" style="margin-top: 15px;">💾 첫장+막장 저장</button>
         </div>
+        <button class="btn-close-preview" onclick="resetSplitTool(); smoothScrollToTop(500);">✕ 닫기</button>
       </div>
     </div>
 
@@ -1262,6 +1452,7 @@
           첫장: 왼쪽에 빈 페이지 추가 (원본이 오른쪽)<br>
           막장: 오른쪽에 빈 페이지 추가 (원본이 왼쪽)
         </p>
+        <button class="btn-close-preview" onclick="resetExtendTool(); smoothScrollToTop(500);">✕ 닫기</button>
       </div>
 
       <div class="save-notification" id="extendSaveNotification">✓ 저장 완료!</div>
@@ -1275,6 +1466,7 @@
           <p id="extendResultInfo">출력 크기: - | 해상도: - DPI</p>
           <button class="btn-download" id="extendDownloadBtn" style="margin-top: 12px;">💾 다운로드</button>
         </div>
+        <button class="btn-close-preview" onclick="resetExtendTool(); smoothScrollToTop(500);">✕ 닫기</button>
       </div>
     </div>
 
@@ -1324,6 +1516,23 @@
             oninput="this.value = this.value.replace(/[^0-9]/g, ''); updatePagePreview();">
           <span id="pagePreviewText" style="font-size: 12px; color: rgba(255,255,255,0.5);">→ 1.jpg, 2.jpg, 3.jpg ...</span>
         </div>
+
+        <div style="display: flex; align-items: center; justify-content: center; gap: 15px; margin-bottom: 20px; padding: 18px; background: rgba(212, 175, 55, 0.1); border: 1px solid rgba(212, 175, 55, 0.3); border-radius: 10px;">
+          <label style="font-size: 13px; color: #f4d03f;">📖 시작 방향:</label>
+          <div class="radio-group">
+            <label class="radio-item">
+              <input type="radio" name="mergeStartDirection" value="left" checked>
+              <span>왼쪽 시작 (짝수)</span>
+            </label>
+            <label class="radio-item">
+              <input type="radio" name="mergeStartDirection" value="right">
+              <span>오른쪽 시작 (홀수)</span>
+            </label>
+          </div>
+        </div>
+        <p style="text-align: center; margin-bottom: 20px; color: rgba(255,255,255,0.5); font-size: 12px;">
+          💡 오른쪽 시작: 첫 장 왼쪽에 빈 페이지 추가 | 마지막이 홀수면 오른쪽에 빈 페이지 추가
+        </p>
 
         <div style="display: flex; align-items: center; justify-content: center; gap: 10px; margin-bottom: 20px; padding: 14px; background: rgba(244, 67, 54, 0.1); border: 1px solid rgba(244, 67, 54, 0.3); border-radius: 10px;">
           <input type="checkbox" id="deleteOriginalCheckbox" style="width: 16px; height: 16px; cursor: pointer;">
@@ -1470,6 +1679,47 @@
         <!-- 3열 그리드 이미지 목록 -->
         <div class="resize-file-grid" id="resizeFileList"></div>
 
+        <h2 class="section-title" style="margin-top: 30px;">📐 비율 계산기 (엑셀 공식)</h2>
+
+        <div class="option-box" style="flex-direction: column; gap: 15px;">
+          <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <div class="option-group">
+              <label>원본 가로:</label>
+              <input type="number" id="calcOrigWidth" placeholder="14" step="0.1" min="0.1" style="width: 80px;">
+            </div>
+            <span style="color: rgba(255,255,255,0.5); font-size: 20px;">×</span>
+            <div class="option-group">
+              <label>원본 세로:</label>
+              <input type="number" id="calcOrigHeight" placeholder="11" step="0.1" min="0.1" style="width: 80px;">
+            </div>
+          </div>
+
+          <div style="text-align: center; color: rgba(255,255,255,0.5); font-size: 12px;">▼ 새 크기 입력 (한쪽만 입력하면 비율 자동 계산)</div>
+
+          <div style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap; justify-content: center;">
+            <div class="option-group">
+              <label>새 가로:</label>
+              <input type="number" id="calcNewWidth" placeholder="13" step="0.1" min="0.1" style="width: 80px;">
+            </div>
+            <span style="color: rgba(255,255,255,0.5); font-size: 20px;">×</span>
+            <div class="option-group">
+              <label>새 세로:</label>
+              <input type="number" id="calcNewHeight" placeholder="자동" step="0.1" min="0.1" style="width: 80px;">
+            </div>
+          </div>
+
+          <div style="text-align: center; padding: 15px; background: rgba(0,0,0,0.3); border-radius: 10px;">
+            <div style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 8px;">📊 엑셀 공식: =새가로*원본세로/원본가로</div>
+            <div id="calcFormula" style="font-size: 13px; color: #64b5f6; font-family: monospace; margin-bottom: 8px;">새 세로 = 새가로 × 원본세로 ÷ 원본가로</div>
+            <div id="calcResult" style="font-size: 22px; font-weight: 700; color: #f4d03f;">결과: -</div>
+          </div>
+
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-secondary" id="calcApplyBtn" style="padding: 10px 20px;">📥 아래 설정에 적용</button>
+            <button class="btn-secondary" id="calcResetBtn" style="padding: 10px 20px;">🔄 초기화</button>
+          </div>
+        </div>
+
         <h2 class="section-title" style="margin-top: 30px;">⭐ 즐겨찾기 (자주 사용하는 크기)</h2>
 
         <div class="resize-presets" id="resizePresets">
@@ -1556,9 +1806,184 @@
         <div class="btn-container" style="margin-top: 25px;">
           <button class="btn-primary" id="resizeBtn" disabled>📐 사이즈 변경 + 저장</button>
         </div>
+        <button class="btn-close-preview" onclick="resetResizeTool(); smoothScrollToTop(500);">✕ 닫기</button>
       </div>
 
       <div class="save-notification" id="resizeSaveNotification">✓ 사이즈 변경 완료!</div>
+    </div>
+
+    <!-- ========== 비율 계산기 ========== -->
+    <div class="tool-section" id="ratioTool">
+      <button class="back-btn" onclick="showMenu()">← 메뉴로 돌아가기</button>
+
+      <div class="glass-card">
+        <h2 class="section-title">🧮 비율 계산기</h2>
+        <p style="text-align: center; color: rgba(255,255,255,0.6); margin-bottom: 25px;">
+          엑셀 공식 <code style="background: rgba(0,0,0,0.3); padding: 3px 8px; border-radius: 4px; color: #64b5f6;">=새가로*원본세로/원본가로</code> 로 비율 계산
+        </p>
+
+        <div class="option-box" style="flex-direction: column; gap: 20px; padding: 25px;">
+          <!-- 원본 크기 입력 -->
+          <div style="text-align: center;">
+            <div style="font-size: 14px; color: #f4d03f; margin-bottom: 12px; font-weight: 600;">📦 원본 크기</div>
+            <div style="display: flex; align-items: center; gap: 15px; justify-content: center; flex-wrap: wrap;">
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <label style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">가로</label>
+                <input type="number" id="ratioOrigWidth" placeholder="14" step="0.01" min="0.01" style="width: 100px; padding: 12px; font-size: 18px; text-align: center; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff;">
+              </div>
+              <span style="color: rgba(255,255,255,0.5); font-size: 24px; margin-top: 15px;">×</span>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <label style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">세로</label>
+                <input type="number" id="ratioOrigHeight" placeholder="11" step="0.01" min="0.01" style="width: 100px; padding: 12px; font-size: 18px; text-align: center; border: 2px solid rgba(212, 175, 55, 0.5); border-radius: 8px; background: rgba(0,0,0,0.3); color: #fff;">
+              </div>
+            </div>
+          </div>
+
+          <div style="text-align: center; color: rgba(255,255,255,0.4); font-size: 20px;">▼</div>
+
+          <!-- 새 크기 입력 -->
+          <div style="text-align: center;">
+            <div style="font-size: 14px; color: #81c784; margin-bottom: 12px; font-weight: 600;">📐 새 크기 (한쪽만 입력)</div>
+            <div style="display: flex; align-items: center; gap: 15px; justify-content: center; flex-wrap: wrap;">
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <label style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">새 가로</label>
+                <input type="number" id="ratioNewWidth" placeholder="13" step="0.01" min="0.01" style="width: 100px; padding: 12px; font-size: 18px; text-align: center; border: 2px solid rgba(129, 199, 132, 0.5); border-radius: 8px; background: rgba(0,0,0,0.3); color: #81c784; font-weight: bold;">
+              </div>
+              <span style="color: rgba(255,255,255,0.5); font-size: 24px; margin-top: 15px;">×</span>
+              <div style="display: flex; flex-direction: column; align-items: center;">
+                <label style="font-size: 11px; color: rgba(255,255,255,0.5); margin-bottom: 5px;">새 세로</label>
+                <input type="number" id="ratioNewHeight" placeholder="자동" step="0.01" min="0.01" style="width: 100px; padding: 12px; font-size: 18px; text-align: center; border: 2px solid rgba(129, 199, 132, 0.5); border-radius: 8px; background: rgba(0,0,0,0.3); color: #81c784; font-weight: bold;">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 계산 결과 -->
+        <div style="margin-top: 25px; padding: 25px; background: rgba(0,0,0,0.3); border-radius: 14px; text-align: center;">
+          <div style="font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 10px;">📊 계산 공식</div>
+          <div id="ratioFormula" style="font-size: 16px; color: #64b5f6; font-family: monospace; margin-bottom: 15px; padding: 10px; background: rgba(0,0,0,0.3); border-radius: 8px;">
+            새 세로 = 새가로 × 원본세로 ÷ 원본가로
+          </div>
+          <div id="ratioResult" style="font-size: 32px; font-weight: 700; color: #f4d03f; padding: 15px;">
+            결과: -
+          </div>
+          <div id="ratioPercent" style="font-size: 14px; color: rgba(255,255,255,0.6); margin-top: 10px;"></div>
+        </div>
+
+        <!-- 버튼 -->
+        <div style="display: flex; gap: 15px; justify-content: center; margin-top: 25px; flex-wrap: wrap;">
+          <button class="btn-primary" id="ratioResetBtn" style="background: rgba(255,255,255,0.1); color: #fff; border: 2px solid rgba(255,255,255,0.3);">🔄 초기화</button>
+          <button class="btn-primary" id="ratioCopyBtn">📋 결과 복사</button>
+        </div>
+
+        <!-- 자주 사용하는 비율 -->
+        <div style="margin-top: 30px;">
+          <div style="text-align: center; font-size: 14px; color: rgba(255,255,255,0.7); margin-bottom: 15px;">⭐ 자주 사용하는 원본 크기</div>
+          <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+            <button class="btn-secondary ratio-preset-btn" data-width="14" data-height="11" style="padding: 10px 16px;">14×11</button>
+            <button class="btn-secondary ratio-preset-btn" data-width="12" data-height="9" style="padding: 10px 16px;">12×9</button>
+            <button class="btn-secondary ratio-preset-btn" data-width="10" data-height="8" style="padding: 10px 16px;">10×8</button>
+            <button class="btn-secondary ratio-preset-btn" data-width="8" data-height="6" style="padding: 10px 16px;">8×6</button>
+            <button class="btn-secondary ratio-preset-btn" data-width="16" data-height="9" style="padding: 10px 16px;">16×9</button>
+            <button class="btn-secondary ratio-preset-btn" data-width="4" data-height="3" style="padding: 10px 16px;">4×3</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========== 이미지 반으로 자르기 ========== -->
+    <div class="tool-section" id="cutTool">
+      <button class="back-btn" onclick="showMenu()">← 메뉴로 돌아가기</button>
+
+      <div class="glass-card">
+        <h2 class="section-title">🔪 이미지 반으로 자르기</h2>
+
+        <div class="folder-setting">
+          <span class="folder-icon">📁</span>
+          <div class="folder-info">
+            <div class="folder-label">저장 위치</div>
+            <div class="folder-name" id="cutFolderName">원본 파일 위치에 자동 저장</div>
+          </div>
+          <span class="auto-save-badge">✓ 원본 위치 저장</span>
+        </div>
+
+        <div class="upload-zone" id="cutUploadZone">
+          <input type="file" id="cutFileInput" accept="image/jpeg,image/jpg,image/png">
+          <div class="upload-icon">🔪</div>
+          <h3>이미지를 드래그하거나 클릭하여 업로드</h3>
+          <span>JPG, PNG 파일 지원 · 정확히 반으로 잘라 +L / +R 저장</span>
+        </div>
+
+        <div class="image-info" id="cutImageInfo">
+          <div class="info-grid">
+            <div class="info-item">
+              <label>파일명</label>
+              <span id="cutInfoFileName">-</span>
+            </div>
+            <div class="info-item">
+              <label>원본 크기</label>
+              <span id="cutInfoSize">-</span>
+            </div>
+            <div class="info-item">
+              <label>용량</label>
+              <span id="cutInfoFileSize">-</span>
+            </div>
+            <div class="info-item">
+              <label>해상도</label>
+              <span id="cutInfoDPI" style="color: #f4d03f;">-</span>
+            </div>
+            <div class="info-item">
+              <label>자른 후 크기</label>
+              <span id="cutInfoCutSize">-</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card preview-section" id="cutPreviewSection">
+        <h2 class="section-title">🖼 원본 이미지</h2>
+        <div class="original-preview">
+          <img id="cutOriginalPreview" src="" alt="원본">
+        </div>
+        <div class="btn-container" style="margin-top: 20px;">
+          <button class="btn-primary" id="cutBtn">🔪 반으로 자르기</button>
+        </div>
+        <button class="btn-close-preview" onclick="resetCutTool(); smoothScrollToTop(500);">✕ 닫기</button>
+      </div>
+
+      <div class="save-notification" id="cutSaveNotification">✓ 저장 완료!</div>
+
+      <div class="glass-card result-section" id="cutResultSection">
+        <h2 class="result-title"><span class="golden-text">✨ 자르기 완료</span></h2>
+        <div class="result-grid">
+          <div class="preview-card">
+            <div class="card-header">
+              <div class="preview-label golden-text">왼쪽 (+L)</div>
+              <span>파일명+L.jpg (Left Half)</span>
+            </div>
+            <div class="card-body"><img id="cutLeftPreview" src="" alt="왼쪽"></div>
+            <div class="card-footer">
+              <button class="btn-download" id="downloadCutLeft">💾 왼쪽(+L) 저장</button>
+            </div>
+          </div>
+          <div class="preview-card">
+            <div class="card-header">
+              <div class="preview-label golden-text">오른쪽 (+R)</div>
+              <span>파일명+R.jpg (Right Half)</span>
+            </div>
+            <div class="card-body"><img id="cutRightPreview" src="" alt="오른쪽"></div>
+            <div class="card-footer">
+              <button class="btn-download" id="downloadCutRight">💾 오른쪽(+R) 저장</button>
+            </div>
+          </div>
+        </div>
+        <div class="download-all">
+          <p id="cutResultSizeInfo">출력 크기: -</p>
+          <p id="cutFileNames">파일명: -</p>
+          <button class="btn-primary" id="cutSaveBothBtn" style="margin-top: 15px;">💾 왼쪽+오른쪽 모두 저장</button>
+        </div>
+        <button class="btn-close-preview" onclick="resetCutTool(); smoothScrollToTop(500);">✕ 닫기</button>
+      </div>
     </div>
 
     <!-- 푸터 -->
@@ -1611,6 +2036,8 @@
       resetMergeTool();
       resetPdfTool();
       resetResizeTool();
+      resetRatioTool();
+      resetCutTool();
     }
 
     function showTool(tool) {
@@ -1625,7 +2052,9 @@
         'extend': '첫장막장 늘리기',
         'merge': 'JPG 좌우합치기',
         'pdf': 'PDF 만들기',
-        'resize': '해상도사이즈 조절'
+        'resize': '해상도사이즈 조절',
+        'ratio': '비율 계산기',
+        'cut': '이미지 반으로 자르기'
       };
       trackFeatureUsage(toolNames[tool] || tool, 'tool_selected');
     }
@@ -1635,6 +2064,28 @@
       const start = window.pageYOffset;
       const target = document.body.scrollHeight - window.innerHeight;
       const distance = target - start;
+      let startTime = null;
+
+      function animation(currentTime) {
+        if (startTime === null) startTime = currentTime;
+        const timeElapsed = currentTime - startTime;
+        const progress = Math.min(timeElapsed / duration, 1);
+        // easeInOutCubic for smooth effect
+        const ease = progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+        window.scrollTo(0, start + distance * ease);
+        if (timeElapsed < duration) {
+          requestAnimationFrame(animation);
+        }
+      }
+      requestAnimationFrame(animation);
+    }
+
+    // 맨 위로 부드럽게 스크롤
+    function smoothScrollToTop(duration = 1000) {
+      const start = window.pageYOffset;
+      const distance = -start;
       let startTime = null;
 
       function animation(currentTime) {
@@ -1683,9 +2134,13 @@
       return 300;
     }
 
-    function canvasToJPEGWithDPI(canvas, dpi, quality = 0.95) {
-      return new Promise((resolve) => {
+    function canvasToJPEGWithDPI(canvas, dpi, quality = 1.0) {
+      return new Promise((resolve, reject) => {
         canvas.toBlob((blob) => {
+          if (!blob) {
+            reject(new Error('캔버스를 이미지로 변환할 수 없습니다.'));
+            return;
+          }
           const reader = new FileReader();
           reader.onload = () => {
             const modifiedBuffer = insertDPIIntoJPEG(reader.result, dpi);
@@ -1693,6 +2148,7 @@
             const url = URL.createObjectURL(modifiedBlob);
             resolve({ url, blob: modifiedBlob });
           };
+          reader.onerror = () => reject(new Error('파일 읽기 실패'));
           reader.readAsArrayBuffer(blob);
         }, 'image/jpeg', quality);
       });
@@ -1766,6 +2222,7 @@
     let splitOriginalDPI = 300;
     let splitDirectoryHandle = null;
     let splitOriginalFileHandle = null;
+    let saveBothState = 'select';
 
     function resetSplitTool() {
       splitOriginalImage = null;
@@ -1775,8 +2232,9 @@
       splitLeftBlob = null;
       splitRightBlob = null;
       splitOriginalDPI = 300;
-      splitDirectoryHandle = null;
+      // splitDirectoryHandle 유지 (첫번째 선택 폴더 재사용)
       splitOriginalFileHandle = null;
+      saveBothState = 'select';
       document.getElementById('splitImageInfo').classList.remove('show');
       document.getElementById('splitPreviewSection').classList.remove('show');
       document.getElementById('splitResultSection').classList.remove('show');
@@ -1785,6 +2243,7 @@
       document.getElementById('originalPreview').src = '';
       document.getElementById('leftPreview').src = '';
       document.getElementById('rightPreview').src = '';
+      document.getElementById('saveBothBtn').innerHTML = '💾 첫장+막장 저장';
     }
 
     const splitUploadZone = document.getElementById('splitUploadZone');
@@ -1793,7 +2252,7 @@
     splitUploadZone.addEventListener('click', async () => {
       if ('showOpenFilePicker' in window) {
         try {
-          splitDirectoryHandle = null;
+          // splitDirectoryHandle 유지 (첫번째 선택 폴더 재사용)
           splitOriginalFileHandle = null;
           const [fileHandle] = await window.showOpenFilePicker({
             types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }],
@@ -1843,7 +2302,7 @@
                 return;
               } else if (handle && handle.kind === 'file') {
                 splitOriginalFileHandle = handle;
-                splitDirectoryHandle = null;
+                // splitDirectoryHandle 유지 (첫번째 선택 폴더 재사용)
                 const file = await handle.getFile();
                 handleSplitFile(file);
                 return;
@@ -1901,16 +2360,9 @@
 
     document.getElementById('splitBtn').addEventListener('click', async () => {
       if (!splitOriginalImage) return;
-      if (!splitDirectoryHandle && 'showDirectoryPicker' in window) {
-        try {
-          splitDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
-          document.getElementById('splitFolderName').textContent = `📁 ${splitDirectoryHandle.name}`;
-        } catch (err) {
-          if (err.name === 'AbortError') return;
-        }
-      }
-
       const btn = document.getElementById('splitBtn');
+
+      // 분리 실행
       btn.disabled = true;
       btn.innerHTML = '<span class="pulse">✂️ 분리 중...</span>';
 
@@ -1934,8 +2386,8 @@
       rightCtx.fillRect(0, 0, fullWidth, fullHeight);
       rightCtx.drawImage(splitOriginalImage, halfWidth, 0, fullWidth - halfWidth, fullHeight, 0, 0, fullWidth - halfWidth, fullHeight);
 
-      const leftResult = await canvasToJPEGWithDPI(leftCanvas, splitOriginalDPI, 0.95);
-      const rightResult = await canvasToJPEGWithDPI(rightCanvas, splitOriginalDPI, 0.95);
+      const leftResult = await canvasToJPEGWithDPI(leftCanvas, splitOriginalDPI, 1.0);
+      const rightResult = await canvasToJPEGWithDPI(rightCanvas, splitOriginalDPI, 1.0);
 
       splitLeftDataUrl = leftResult.url;
       splitLeftBlob = leftResult.blob;
@@ -1944,6 +2396,100 @@
       splitRightDataUrl = rightResult.url;
       splitRightBlob = rightResult.blob;
       document.getElementById('rightPreview').src = splitRightDataUrl;
+
+      document.getElementById('fileNames').textContent = `파일명: 첫장.jpg, 막장.jpg`;
+      document.getElementById('resultSizeInfo').textContent = `출력 크기: ${fullWidth} × ${fullHeight}px | 해상도: ${splitOriginalDPI} DPI`;
+      document.getElementById('splitResultSection').classList.add('show');
+
+      btn.disabled = false;
+      btn.innerHTML = '✂️ 분리';
+
+      // 분리 완료 후 결과 섹션으로 부드럽게 스크롤
+      setTimeout(() => {
+        const resultSection = document.getElementById('splitResultSection');
+        resultSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+    });
+
+    document.getElementById('downloadLeft').addEventListener('click', async () => {
+      if (!splitLeftBlob) return;
+
+      // 폴더 선택 (첫번째만)
+      if (!splitDirectoryHandle && 'showDirectoryPicker' in window) {
+        try {
+          splitDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+          document.getElementById('splitFolderName').textContent = `📁 ${splitDirectoryHandle.name}`;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+
+      if (splitDirectoryHandle) {
+        await saveToFolder(splitDirectoryHandle, splitLeftBlob, '첫장.jpg');
+        const notif = document.getElementById('splitSaveNotification');
+        notif.innerHTML = `✓ 첫장 저장 완료!<br><small style="font-weight: 400;">${splitDirectoryHandle.name} 폴더에 첫장.jpg 저장됨</small>`;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 2000);
+      } else {
+        fallbackDownload(splitLeftBlob, '첫장.jpg');
+      }
+      trackFeatureUsage('첫장막장 분리', 'save_left');
+    });
+
+    document.getElementById('downloadRight').addEventListener('click', async () => {
+      if (!splitRightBlob) return;
+
+      // 폴더 선택 (첫번째만)
+      if (!splitDirectoryHandle && 'showDirectoryPicker' in window) {
+        try {
+          splitDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+          document.getElementById('splitFolderName').textContent = `📁 ${splitDirectoryHandle.name}`;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+
+      if (splitDirectoryHandle) {
+        await saveToFolder(splitDirectoryHandle, splitRightBlob, '막장.jpg');
+        const notif = document.getElementById('splitSaveNotification');
+        notif.innerHTML = `✓ 막장 저장 완료!<br><small style="font-weight: 400;">${splitDirectoryHandle.name} 폴더에 막장.jpg 저장됨</small>`;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 2000);
+      } else {
+        fallbackDownload(splitRightBlob, '막장.jpg');
+      }
+      trackFeatureUsage('첫장막장 분리', 'save_right');
+    });
+
+    // 첫장+막장 한번에 저장
+    document.getElementById('saveBothBtn').addEventListener('click', async () => {
+      if (!splitLeftBlob || !splitRightBlob) return;
+
+      const btn = document.getElementById('saveBothBtn');
+
+      // 1단계: 폴더 선택 → 아래로 스크롤 → 대기
+      if (saveBothState === 'select') {
+        if (!splitDirectoryHandle && 'showDirectoryPicker' in window) {
+          try {
+            splitDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+            document.getElementById('splitFolderName').textContent = `📁 ${splitDirectoryHandle.name}`;
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+          }
+        }
+
+        // 폴더 선택 완료 → 버튼 변경 및 스크롤
+        saveBothState = 'ready';
+        btn.innerHTML = '✅ 저장 확인';
+
+        // 아래로 부드럽게 스크롤
+        setTimeout(() => smoothScrollToBottom(800), 100);
+        return;
+      }
+
+      // 2단계: 실제 저장
+      btn.disabled = true;
+      btn.innerHTML = '<span class="pulse">💾 저장 중...</span>';
 
       let saveSuccess = false;
       if (splitDirectoryHandle) {
@@ -1957,42 +2503,22 @@
         notif.innerHTML = `✓ 저장 완료!<br><small style="font-weight: 400;">${splitDirectoryHandle.name} 폴더에 첫장.jpg, 막장.jpg 저장됨</small>`;
         notif.classList.add('show');
         setTimeout(() => notif.classList.remove('show'), 3000);
-        // Google Analytics 추적
-        trackFeatureUsage('첫장막장 분리', 'split_saved');
+        trackFeatureUsage('첫장막장 분리', 'save_both');
       } else if (!splitDirectoryHandle) {
         fallbackDownload(splitLeftBlob, '첫장.jpg');
         fallbackDownload(splitRightBlob, '막장.jpg');
-        trackFeatureUsage('첫장막장 분리', 'split_downloaded');
+        trackFeatureUsage('첫장막장 분리', 'download_both');
       }
 
-      document.getElementById('fileNames').textContent = `파일명: 첫장.jpg, 막장.jpg`;
-      document.getElementById('resultSizeInfo').textContent = `출력 크기: ${fullWidth} × ${fullHeight}px | 해상도: ${splitOriginalDPI} DPI`;
-      document.getElementById('splitResultSection').classList.add('show');
       btn.disabled = false;
-      btn.innerHTML = '✂️ 분리 + 자동 저장';
-      // 분리 완료 후 상단으로 스크롤
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 300);
-    });
+      btn.innerHTML = '💾 첫장+막장 저장';
+      saveBothState = 'select';
 
-    document.getElementById('downloadLeft').addEventListener('click', () => {
-      if (splitLeftBlob) {
-        fallbackDownload(splitLeftBlob, '첫장.jpg');
-        trackFeatureUsage('첫장막장 분리', 'download_left');
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-      }
-    });
-    document.getElementById('downloadRight').addEventListener('click', () => {
-      if (splitRightBlob) {
-        fallbackDownload(splitRightBlob, '막장.jpg');
-        trackFeatureUsage('첫장막장 분리', 'download_right');
-        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
-      }
-    });
-    document.getElementById('downloadBoth').addEventListener('click', () => {
-      if (splitLeftBlob) fallbackDownload(splitLeftBlob, '첫장.jpg');
-      if (splitRightBlob) fallbackDownload(splitRightBlob, '막장.jpg');
-      trackFeatureUsage('첫장막장 분리', 'download_both');
-      setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 100);
+      // 저장 완료 후 초기화 및 맨 위로 부드럽게 스크롤
+      setTimeout(() => {
+        resetSplitTool();
+        smoothScrollToTop(1000);
+      }, 300);
     });
 
     // ========== 첫장/막장 늘리기 (NEW) ==========
@@ -2178,7 +2704,7 @@
         ctx.drawImage(extendOriginalImage, 0, 0);
       }
 
-      const result = await canvasToJPEGWithDPI(canvas, extendOriginalDPI, 0.95);
+      const result = await canvasToJPEGWithDPI(canvas, extendOriginalDPI, 1.0);
       extendResultBlob = result.blob;
       extendResultUrl = result.url;
 
@@ -2425,6 +2951,7 @@
 
       await requestWritePermission(folder.handle);
 
+      // 이미지 로드
       for (let i = 0; i < folder.files.length; i++) {
         const fileHandle = folder.files[i];
         const file = await fileHandle.getFile();
@@ -2439,17 +2966,83 @@
           image.src = url;
         });
         images.push({ file, img, dpi, url });
-        if (i === 0) { baseDPI = dpi; baseHeight = img.height; }
-        else {
+        if (i === 0) {
+          baseDPI = dpi;
+          baseHeight = img.height;
+        } else {
           if (dpi !== baseDPI) warnings.push(`${file.name}: 해상도 다름 (${dpi} vs ${baseDPI})`);
           if (img.height !== baseHeight) warnings.push(`${file.name}: 높이 다름 (${img.height}px vs ${baseHeight}px)`);
         }
       }
 
+      // 이미지가 없으면 에러 반환
+      if (images.length === 0) {
+        return { success: false, warnings, error: '이미지를 찾을 수 없습니다.' };
+      }
+
+      // 시작 방향 옵션 읽기
+      const startDirectionEl = document.querySelector('input[name="mergeStartDirection"]:checked');
+      const startDirection = startDirectionEl ? startDirectionEl.value : 'left';
+      const isRightStart = startDirection === 'right';
+
+      // 빈 페이지 크기 계산 (첫 번째 이미지와 동일한 크기)
+      const firstImage = images[0];
+      const blankPageWidth = firstImage.img.width;
+      const blankPageHeight = firstImage.img.height;
+
+      // 오른쪽 시작이면 왼쪽에 빈 페이지 추가
+      if (isRightStart) {
+        const blankCanvas = document.createElement('canvas');
+        blankCanvas.width = blankPageWidth;
+        blankCanvas.height = blankPageHeight;
+        const blankCtx = blankCanvas.getContext('2d');
+        blankCtx.fillStyle = '#FFFFFF';
+        blankCtx.fillRect(0, 0, blankPageWidth, blankPageHeight);
+
+        // 캔버스를 이미지로 변환
+        const blankImg = new Image();
+        blankImg.src = blankCanvas.toDataURL();
+        await new Promise(resolve => blankImg.onload = resolve);
+
+        // 맨 앞에 빈 페이지 추가
+        images.unshift({
+          file: null,
+          img: blankImg,
+          dpi: baseDPI,
+          url: blankCanvas.toDataURL(),
+          isBlank: true
+        });
+      }
+
+      // 이미지 개수가 홀수이면 마지막에 빈 페이지 추가
+      if (images.length % 2 !== 0) {
+        const blankCanvas = document.createElement('canvas');
+        blankCanvas.width = blankPageWidth;
+        blankCanvas.height = blankPageHeight;
+        const blankCtx = blankCanvas.getContext('2d');
+        blankCtx.fillStyle = '#FFFFFF';
+        blankCtx.fillRect(0, 0, blankPageWidth, blankPageHeight);
+
+        const blankImg = new Image();
+        blankImg.src = blankCanvas.toDataURL();
+        await new Promise(resolve => blankImg.onload = resolve);
+
+        // 맨 뒤에 빈 페이지 추가
+        images.push({
+          file: null,
+          img: blankImg,
+          dpi: baseDPI,
+          url: blankCanvas.toDataURL(),
+          isBlank: true
+        });
+      }
+
+      // 전체 너비 계산
       const totalWidth = images.reduce((sum, item) => sum + item.img.width, 0);
       const maxHeight = Math.max(...images.map(item => item.img.height));
       const outputDPI = images[0].dpi;
 
+      // 캔버스에 이미지 합치기
       const canvas = document.createElement('canvas');
       canvas.width = totalWidth;
       canvas.height = maxHeight;
@@ -2463,6 +3056,7 @@
         currentX += item.img.width;
       }
 
+      // JPEG로 변환 및 저장
       const result = await canvasToJPEGWithDPI(canvas, outputDPI, 1.0);
       const formattedPageNumber = String(pageNumber).padStart(pageDigits, '0');
       const outputFileName = `${formattedPageNumber}.jpg`;
@@ -2472,13 +3066,25 @@
         const writable = await fileHandle.createWritable({ keepExistingData: false });
         await writable.write(result.blob);
         await writable.close();
-        images.forEach(item => URL.revokeObjectURL(item.url));
 
+        // URL 정리
+        images.forEach(item => {
+          if (item.url && !item.isBlank) URL.revokeObjectURL(item.url);
+        });
+
+        // 원본 파일 삭제 옵션 처리 (★ 수정: isBlank 체크 추가)
         if (document.getElementById('deleteOriginalCheckbox').checked) {
-          for (const fh of folder.files) {
-            try { await folder.handle.removeEntry(fh.name); } catch (e) {}
+          for (const item of images) {
+            if (item.file && !item.isBlank) {
+              try {
+                await folder.handle.removeEntry(item.file.name);
+              } catch (e) {
+                console.error('원본 파일 삭제 실패:', item.file.name, e);
+              }
+            }
           }
         }
+
         return { success: true, warnings, outputFileName };
       } catch (err) {
         return { success: false, warnings, error: err.message };
@@ -2824,6 +3430,93 @@
       document.getElementById('pdfBtn').innerHTML = '📄 PDF 생성';
     });
 
+    // ========== 비율 계산기 도구 ==========
+    let ratioLastChanged = 'width';
+
+    function resetRatioTool() {
+      document.getElementById('ratioOrigWidth').value = '';
+      document.getElementById('ratioOrigHeight').value = '';
+      document.getElementById('ratioNewWidth').value = '';
+      document.getElementById('ratioNewHeight').value = '';
+      document.getElementById('ratioFormula').textContent = '새 세로 = 새가로 × 원본세로 ÷ 원본가로';
+      document.getElementById('ratioResult').textContent = '결과: -';
+      document.getElementById('ratioPercent').textContent = '';
+      ratioLastChanged = 'width';
+    }
+
+    function updateRatioTool() {
+      const origW = parseFloat(document.getElementById('ratioOrigWidth').value) || 0;
+      const origH = parseFloat(document.getElementById('ratioOrigHeight').value) || 0;
+      const newW = parseFloat(document.getElementById('ratioNewWidth').value) || 0;
+      const newH = parseFloat(document.getElementById('ratioNewHeight').value) || 0;
+
+      const formulaEl = document.getElementById('ratioFormula');
+      const resultEl = document.getElementById('ratioResult');
+      const percentEl = document.getElementById('ratioPercent');
+
+      if (origW <= 0 || origH <= 0) {
+        formulaEl.textContent = '원본 가로/세로를 입력하세요';
+        resultEl.textContent = '결과: -';
+        percentEl.textContent = '';
+        return;
+      }
+
+      if (ratioLastChanged === 'width' && newW > 0) {
+        const calcHeight = (newW * origH / origW);
+        formulaEl.innerHTML = `<span style="color:#81c784">${newW}</span> × <span style="color:#64b5f6">${origH}</span> ÷ <span style="color:#ffb74d">${origW}</span> = <span style="color:#f4d03f;font-weight:bold">${calcHeight.toFixed(5)}</span>`;
+        resultEl.innerHTML = `새 세로: <span style="font-size: 40px;">${calcHeight.toFixed(2)}</span>`;
+        document.getElementById('ratioNewHeight').value = calcHeight.toFixed(2);
+        const scalePercent = ((newW / origW) * 100).toFixed(1);
+        percentEl.textContent = `축소/확대 비율: ${scalePercent}%`;
+      } else if (ratioLastChanged === 'height' && newH > 0) {
+        const calcWidth = (newH * origW / origH);
+        formulaEl.innerHTML = `<span style="color:#81c784">${newH}</span> × <span style="color:#ffb74d">${origW}</span> ÷ <span style="color:#64b5f6">${origH}</span> = <span style="color:#f4d03f;font-weight:bold">${calcWidth.toFixed(5)}</span>`;
+        resultEl.innerHTML = `새 가로: <span style="font-size: 40px;">${calcWidth.toFixed(2)}</span>`;
+        document.getElementById('ratioNewWidth').value = calcWidth.toFixed(2);
+        const scalePercent = ((newH / origH) * 100).toFixed(1);
+        percentEl.textContent = `축소/확대 비율: ${scalePercent}%`;
+      } else {
+        formulaEl.textContent = '새 가로 또는 새 세로를 입력하세요';
+        resultEl.textContent = '결과: -';
+        percentEl.textContent = '';
+      }
+    }
+
+    document.getElementById('ratioOrigWidth').addEventListener('input', updateRatioTool);
+    document.getElementById('ratioOrigHeight').addEventListener('input', updateRatioTool);
+    document.getElementById('ratioNewWidth').addEventListener('input', function() {
+      ratioLastChanged = 'width';
+      updateRatioTool();
+    });
+    document.getElementById('ratioNewHeight').addEventListener('input', function() {
+      ratioLastChanged = 'height';
+      updateRatioTool();
+    });
+
+    document.getElementById('ratioResetBtn').addEventListener('click', resetRatioTool);
+
+    document.getElementById('ratioCopyBtn').addEventListener('click', function() {
+      const newW = document.getElementById('ratioNewWidth').value;
+      const newH = document.getElementById('ratioNewHeight').value;
+      if (newW && newH) {
+        const text = `${newW} × ${newH}`;
+        navigator.clipboard.writeText(text).then(() => {
+          alert(`✅ 복사 완료!\n${text}`);
+        });
+      } else {
+        alert('복사할 결과가 없습니다.');
+      }
+    });
+
+    // 자주 사용하는 원본 크기 프리셋
+    document.querySelectorAll('.ratio-preset-btn').forEach(btn => {
+      btn.addEventListener('click', function() {
+        document.getElementById('ratioOrigWidth').value = this.dataset.width;
+        document.getElementById('ratioOrigHeight').value = this.dataset.height;
+        updateRatioTool();
+      });
+    });
+
     // ========== 해상도/사이즈 조절 도구 ==========
     let resizeFiles = [];
     let resizeDirHandle = null;
@@ -2865,7 +3558,7 @@
       resizeUploadZone.classList.remove('dragover');
       const items = e.dataTransfer.items;
       const fileHandles = [];
-      let folderFound = false;
+      const folderHandles = [];
 
       if (items && items.length > 0) {
         for (let i = 0; i < items.length; i++) {
@@ -2875,9 +3568,7 @@
               const handle = await item.getAsFileSystemHandle();
               if (handle) {
                 if (handle.kind === 'directory') {
-                  await loadResizeFolder(handle);
-                  folderFound = true;
-                  break;
+                  folderHandles.push(handle);
                 } else if (handle.kind === 'file') {
                   fileHandles.push(handle);
                 }
@@ -2891,8 +3582,15 @@
         }
       }
 
-      // 폴더가 아닌 경우 파일들 처리
-      if (!folderFound && fileHandles.length > 0) {
+      // 멀티 폴더 처리
+      if (folderHandles.length > 0) {
+        if (folderHandles.length === 1) {
+          await loadResizeFolder(folderHandles[0]);
+        } else {
+          await loadResizeFoldersMulti(folderHandles);
+        }
+      } else if (fileHandles.length > 0) {
+        // 폴더가 아닌 경우 파일들 처리
         resizeFiles = [];
         resizeDirHandle = null;
         await loadResizeFiles(fileHandles);
@@ -3125,10 +3823,49 @@
       }
     }
 
-    async function loadResizeFolder(dirHandle) {
-      resizeDirHandle = dirHandle;
-      resizeOriginalFolderName = dirHandle.name;
-      resizeFiles = [];
+    // 하위 폴더 재귀 탐색 (최대 3단계)
+    let resizeSkippedFolders = [];
+
+    async function scanResizeFolderRecursive(dirHandle, relativePath, depth, maxDepth = 3) {
+      const files = [];
+
+      try {
+        for await (const entry of dirHandle.values()) {
+          if (entry.kind === 'file') {
+            const name = entry.name.toLowerCase();
+            if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+              files.push({
+                handle: entry,
+                dirHandle: dirHandle,
+                relativePath: relativePath
+              });
+            }
+          } else if (entry.kind === 'directory') {
+            if (depth < maxDepth) {
+              const subPath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+              const subFiles = await scanResizeFolderRecursive(entry, subPath, depth + 1, maxDepth);
+              files.push(...subFiles);
+            } else {
+              // 3단계 초과 폴더 기록
+              const skippedPath = relativePath ? `${relativePath}/${entry.name}` : entry.name;
+              resizeSkippedFolders.push(skippedPath);
+            }
+          }
+        }
+      } catch (err) {
+        console.error('폴더 읽기 오류:', err);
+      }
+
+      return files;
+    }
+
+    async function loadResizeFolder(dirHandle, isMulti = false) {
+      if (!isMulti) {
+        resizeDirHandle = dirHandle;
+        resizeOriginalFolderName = dirHandle.name;
+        resizeFiles = [];
+        resizeSkippedFolders = [];
+      }
 
       // 폴더 이름 먼저 표시
       document.getElementById('resizeFolderName').textContent = `${resizeOriginalFolderName}_지수변경`;
@@ -3136,41 +3873,41 @@
       document.getElementById('resizeFileCount').textContent = '파일 로딩 중...';
 
       try {
-        for await (const entry of dirHandle.values()) {
-          if (entry.kind === 'file') {
-            const name = entry.name.toLowerCase();
-            if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
-              try {
-                const file = await entry.getFile();
-                const arrayBuffer = await file.arrayBuffer();
-                const dpi = extractDPIFromJPEG(arrayBuffer);
+        // 하위 폴더 3단계까지 재귀 탐색
+        const scannedFiles = await scanResizeFolderRecursive(dirHandle, '', 1, 3);
 
-                const img = await new Promise((resolve) => {
-                  const image = new Image();
-                  image.onload = () => resolve(image);
-                  image.onerror = () => resolve(null);
-                  image.src = URL.createObjectURL(file);
-                });
+        for (const fileInfo of scannedFiles) {
+          try {
+            const file = await fileInfo.handle.getFile();
+            const arrayBuffer = await file.slice(0, 65536).arrayBuffer();
+            const dpi = extractDPIFromJPEG(arrayBuffer);
 
-                if (img) {
-                  const widthInch = (img.width / dpi).toFixed(2);
-                  const heightInch = (img.height / dpi).toFixed(2);
-                  resizeFiles.push({
-                    name: entry.name,
-                    file: file,
-                    handle: entry,
-                    width: img.width,
-                    height: img.height,
-                    dpi: dpi,
-                    widthInch: widthInch,
-                    heightInch: heightInch,
-                    url: img.src
-                  });
-                }
-              } catch (fileErr) {
-                console.error('파일 로드 오류:', entry.name, fileErr);
-              }
+            const img = await new Promise((resolve) => {
+              const image = new Image();
+              image.onload = () => resolve(image);
+              image.onerror = () => resolve(null);
+              image.src = URL.createObjectURL(file);
+            });
+
+            if (img) {
+              const widthInch = (img.width / dpi).toFixed(2);
+              const heightInch = (img.height / dpi).toFixed(2);
+              resizeFiles.push({
+                name: fileInfo.handle.name,
+                file: file,
+                handle: fileInfo.handle,
+                dirHandle: fileInfo.dirHandle,
+                relativePath: fileInfo.relativePath,
+                width: img.width,
+                height: img.height,
+                dpi: dpi,
+                widthInch: widthInch,
+                heightInch: heightInch,
+                url: img.src
+              });
             }
+          } catch (fileErr) {
+            console.error('파일 로드 오류:', fileInfo.handle.name, fileErr);
           }
         }
       } catch (err) {
@@ -3179,6 +3916,11 @@
       }
 
       resizeFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
+
+      // 3단계 초과 폴더 경고
+      if (resizeSkippedFolders.length > 0) {
+        alert(`⚠️ 경고: 다음 폴더는 3단계를 초과하여 무시되었습니다:\n\n${resizeSkippedFolders.slice(0, 10).join('\n')}${resizeSkippedFolders.length > 10 ? `\n... 외 ${resizeSkippedFolders.length - 10}개` : ''}`);
+      }
 
       document.getElementById('resizeFileCount').textContent = `${resizeFiles.length}개 파일 선택됨`;
 
@@ -3209,14 +3951,40 @@
       }
     }
 
+    // 멀티 폴더 로드
+    async function loadResizeFoldersMulti(dirHandles) {
+      resizeFiles = [];
+      resizeSkippedFolders = [];
+      resizeDirHandle = dirHandles[0];
+      resizeOriginalFolderName = dirHandles.length > 1 ? `${dirHandles[0].name} 외 ${dirHandles.length - 1}개` : dirHandles[0].name;
+
+      for (const dirHandle of dirHandles) {
+        await loadResizeFolder(dirHandle, true);
+      }
+    }
+
     function renderResizeFileList() {
       const list = document.getElementById('resizeFileList');
       list.innerHTML = '';
 
-      // 가장 많은 사이즈 찾기 (모드 계산)
+      if (resizeFiles.length === 0) return;
+
+      // 폴더별로 파일 그룹화
+      const folderGroups = {};
+      resizeFiles.forEach(item => {
+        const folderPath = item.relativePath || '루트 폴더';
+        if (!folderGroups[folderPath]) {
+          folderGroups[folderPath] = [];
+        }
+        folderGroups[folderPath].push(item);
+      });
+
+      const folderCount = Object.keys(folderGroups).length;
+
+      // 사이즈 분포 계산 (인치 기준)
       const sizeCount = {};
       resizeFiles.forEach(item => {
-        const sizeKey = `${item.width}x${item.height}`;
+        const sizeKey = `${item.widthInch}x${item.heightInch}`;
         sizeCount[sizeKey] = (sizeCount[sizeKey] || 0) + 1;
       });
 
@@ -3230,42 +3998,100 @@
         }
       }
 
-      // 다른 사이즈 개수 계산
-      const differentCount = resizeFiles.filter(item => `${item.width}x${item.height}` !== mostCommonSize).length;
-
-      // 사이즈 그룹 요약 표시
-      if (Object.keys(sizeCount).length > 1) {
-        const summaryDiv = document.createElement('div');
-        summaryDiv.className = 'resize-size-summary';
-        summaryDiv.innerHTML = `
-          <span class="summary-title">📊 사이즈 분포</span>
-          <div class="summary-items">
-            ${Object.entries(sizeCount).map(([size, count]) => {
-              const [w, h] = size.split('x');
-              const isMain = size === mostCommonSize;
-              return `<span class="summary-item ${isMain ? 'main' : 'different'}">${w}×${h} (${count}개)${isMain ? ' ✓' : ' ⚠️'}</span>`;
-            }).join('')}
+      // 전체 요약 카드
+      const summaryCard = document.createElement('div');
+      summaryCard.className = 'resize-summary-card';
+      summaryCard.innerHTML = `
+        <div class="resize-summary-header">
+          <div class="resize-summary-icon">📁</div>
+          <div class="resize-summary-title">
+            <h3>파일 업로드 완료</h3>
+            <p>${resizeOriginalFolderName || '선택된 파일'}</p>
           </div>
-        `;
-        list.appendChild(summaryDiv);
-      }
-
-      resizeFiles.forEach((item, index) => {
-        const sizeKey = `${item.width}x${item.height}`;
-        const isDifferent = sizeKey !== mostCommonSize && Object.keys(sizeCount).length > 1;
-
-        const div = document.createElement('div');
-        div.className = `resize-file-card ${isDifferent ? 'different-size' : ''}`;
-        div.innerHTML = `
-          ${isDifferent ? '<span class="different-badge">⚠️ 다른 사이즈</span>' : ''}
-          <img src="${item.url}" alt="${item.name}">
-          <div class="file-name">${item.name}</div>
-          <div class="file-detail">
-            ${item.width} × ${item.height} px<br>
-            ${item.widthInch}" × ${item.heightInch}" @ ${item.dpi} DPI
+        </div>
+        <div class="resize-summary-stats">
+          <div class="resize-stat-item">
+            <span class="stat-icon">📂</span>
+            <div class="stat-info">
+              <span class="stat-value">${folderCount}</span>
+              <span class="stat-label">폴더</span>
+            </div>
           </div>
+          <div class="resize-stat-item">
+            <span class="stat-icon">🖼️</span>
+            <div class="stat-info">
+              <span class="stat-value">${resizeFiles.length}</span>
+              <span class="stat-label">이미지</span>
+            </div>
+          </div>
+          <div class="resize-stat-item">
+            <span class="stat-icon">📐</span>
+            <div class="stat-info">
+              <span class="stat-value">${Object.keys(sizeCount).length}</span>
+              <span class="stat-label">사이즈 종류</span>
+            </div>
+          </div>
+        </div>
+        ${Object.keys(sizeCount).length > 0 ? `
+        <div class="resize-size-distribution">
+          ${Object.entries(sizeCount).map(([size, count]) => {
+            const [w, h] = size.split('x');
+            const isMain = size === mostCommonSize;
+            return `<span class="resize-size-tag ${isMain ? 'main' : 'different'}">
+              ${isMain ? '✓' : '⚠️'} ${w}"×${h}"
+              <span class="tag-count">${count}</span>
+            </span>`;
+          }).join('')}
+        </div>
+        ` : ''}
+      `;
+      list.appendChild(summaryCard);
+
+      // 폴더별 그룹 렌더링
+      Object.entries(folderGroups).forEach(([folderPath, files], folderIndex) => {
+        const folderGroup = document.createElement('div');
+        folderGroup.className = 'resize-folder-group';
+
+        const folderHeader = document.createElement('div');
+        folderHeader.className = 'resize-folder-header';
+        folderHeader.innerHTML = `
+          <span class="folder-icon">📁</span>
+          <span class="folder-name">${folderPath}</span>
+          <span class="folder-count">${files.length}개</span>
+          <span class="folder-toggle">▼</span>
         `;
-        list.appendChild(div);
+
+        folderHeader.addEventListener('click', () => {
+          folderGroup.classList.toggle('collapsed');
+        });
+
+        const folderContent = document.createElement('div');
+        folderContent.className = 'resize-folder-content';
+
+        const fileList = document.createElement('div');
+        fileList.className = 'resize-file-list';
+
+        files.forEach(item => {
+          const sizeKey = `${item.widthInch}x${item.heightInch}`;
+          const isDifferent = sizeKey !== mostCommonSize && Object.keys(sizeCount).length > 1;
+
+          const fileItem = document.createElement('div');
+          fileItem.className = `resize-file-item ${isDifferent ? 'different-size' : ''}`;
+          fileItem.innerHTML = `
+            <img class="file-thumb" src="${item.url}" alt="${item.name}">
+            <div class="file-info">
+              <div class="file-name">${item.name}</div>
+              <div class="file-meta">${item.width}×${item.height}px @ ${item.dpi} DPI</div>
+            </div>
+            <span class="file-size-badge">${item.widthInch}"×${item.heightInch}"</span>
+          `;
+          fileList.appendChild(fileItem);
+        });
+
+        folderContent.appendChild(fileList);
+        folderGroup.appendChild(folderHeader);
+        folderGroup.appendChild(folderContent);
+        list.appendChild(folderGroup);
       });
     }
 
@@ -3349,6 +4175,77 @@
 
     document.getElementById('resizeNewDPI').addEventListener('input', updateResizeResultPixels);
 
+    // ========== 비율 계산기 ==========
+    let calcLastChanged = 'width'; // 'width' or 'height'
+
+    function updateRatioCalculator() {
+      const origW = parseFloat(document.getElementById('calcOrigWidth').value) || 0;
+      const origH = parseFloat(document.getElementById('calcOrigHeight').value) || 0;
+      const newW = parseFloat(document.getElementById('calcNewWidth').value) || 0;
+      const newH = parseFloat(document.getElementById('calcNewHeight').value) || 0;
+
+      const formulaEl = document.getElementById('calcFormula');
+      const resultEl = document.getElementById('calcResult');
+
+      if (origW <= 0 || origH <= 0) {
+        formulaEl.textContent = '원본 가로/세로를 입력하세요';
+        resultEl.textContent = '결과: -';
+        return;
+      }
+
+      if (calcLastChanged === 'width' && newW > 0) {
+        // 새 가로 입력 → 새 세로 계산
+        const calcHeight = (newW * origH / origW);
+        formulaEl.innerHTML = `<span style="color:#81c784">${newW}</span> × <span style="color:#64b5f6">${origH}</span> ÷ <span style="color:#ffb74d">${origW}</span> = <span style="color:#f4d03f;font-weight:bold">${calcHeight.toFixed(4)}</span>`;
+        resultEl.innerHTML = `새 세로: <span style="font-size: 28px;">${calcHeight.toFixed(2)}</span>`;
+        document.getElementById('calcNewHeight').value = calcHeight.toFixed(2);
+      } else if (calcLastChanged === 'height' && newH > 0) {
+        // 새 세로 입력 → 새 가로 계산
+        const calcWidth = (newH * origW / origH);
+        formulaEl.innerHTML = `<span style="color:#81c784">${newH}</span> × <span style="color:#ffb74d">${origW}</span> ÷ <span style="color:#64b5f6">${origH}</span> = <span style="color:#f4d03f;font-weight:bold">${calcWidth.toFixed(4)}</span>`;
+        resultEl.innerHTML = `새 가로: <span style="font-size: 28px;">${calcWidth.toFixed(2)}</span>`;
+        document.getElementById('calcNewWidth').value = calcWidth.toFixed(2);
+      } else {
+        formulaEl.textContent = '새 가로 또는 새 세로를 입력하세요';
+        resultEl.textContent = '결과: -';
+      }
+    }
+
+    document.getElementById('calcOrigWidth').addEventListener('input', updateRatioCalculator);
+    document.getElementById('calcOrigHeight').addEventListener('input', updateRatioCalculator);
+    document.getElementById('calcNewWidth').addEventListener('input', function() {
+      calcLastChanged = 'width';
+      updateRatioCalculator();
+    });
+    document.getElementById('calcNewHeight').addEventListener('input', function() {
+      calcLastChanged = 'height';
+      updateRatioCalculator();
+    });
+
+    // 계산 결과를 아래 설정에 적용
+    document.getElementById('calcApplyBtn').addEventListener('click', function() {
+      const newW = parseFloat(document.getElementById('calcNewWidth').value);
+      const newH = parseFloat(document.getElementById('calcNewHeight').value);
+      if (newW > 0 && newH > 0) {
+        document.getElementById('resizeNewWidth').value = newW;
+        document.getElementById('resizeNewHeight').value = newH;
+        updateResizeResultPixels();
+        alert(`✅ 적용 완료!\n가로: ${newW}인치, 세로: ${newH}인치`);
+      } else {
+        alert('계산된 값이 없습니다. 먼저 비율을 계산해주세요.');
+      }
+    });
+
+    // 비율 계산기 초기화
+    document.getElementById('calcResetBtn').addEventListener('click', function() {
+      document.getElementById('calcOrigWidth').value = '';
+      document.getElementById('calcOrigHeight').value = '';
+      document.getElementById('calcNewWidth').value = '';
+      document.getElementById('calcNewHeight').value = '';
+      document.getElementById('calcFormula').textContent = '새 세로 = 새가로 × 원본세로 ÷ 원본가로';
+      document.getElementById('calcResult').textContent = '결과: -';
+    });
+
     // 사이즈 변경 실행
     document.getElementById('resizeBtn').addEventListener('click', async () => {
       if (resizeFiles.length === 0 || !resizeDirHandle) return;
@@ -3374,7 +4271,7 @@
       try {
         // 상위 폴더에 새 폴더 생성
         const parentHandle = resizeDirHandle;
-        const newFolderName = `${resizeOriginalFolderName}_지수변경`;
+        const newFolderName = `${resizeOriginalFolderName}_${widthInch}x${heightInch}`;
 
         let outputDirHandle;
         try {
@@ -3382,6 +4279,34 @@
         } catch (err) {
           // 상위 폴더 접근이 안되면 다운로드 방식 사용
           console.log('폴더 생성 불가, 다운로드 방식 사용');
+        }
+
+        // 하위 폴더 경로별 디렉토리 핸들 캐시
+        const subDirCache = {};
+
+        // 하위 폴더 생성 헬퍼 함수 (폴더명에도 치수 추가)
+        async function getOrCreateSubDir(baseDirHandle, relativePath, widthInch, heightInch) {
+          if (!relativePath) return baseDirHandle;
+          const cacheKey = `${relativePath}_${widthInch}x${heightInch}`;
+          if (subDirCache[cacheKey]) return subDirCache[cacheKey];
+
+          const parts = relativePath.split('/');
+          let currentDir = baseDirHandle;
+          for (const part of parts) {
+            // 각 하위 폴더명에 치수 추가
+            const newFolderPart = `${part}_${widthInch}x${heightInch}`;
+            currentDir = await currentDir.getDirectoryHandle(newFolderPart, { create: true });
+          }
+          subDirCache[cacheKey] = currentDir;
+          return currentDir;
+        }
+
+        // 새 파일명 생성 함수 (원본명_가로x세로.확장자)
+        function getNewFileName(originalName, widthInch, heightInch) {
+          const lastDot = originalName.lastIndexOf('.');
+          const baseName = lastDot > 0 ? originalName.substring(0, lastDot) : originalName;
+          const ext = lastDot > 0 ? originalName.substring(lastDot) : '.jpg';
+          return `${baseName}_${widthInch}x${heightInch}${ext}`;
         }
 
         let processedCount = 0;
@@ -3400,15 +4325,20 @@
           ctx.fillRect(0, 0, newWidthPx, newHeightPx);
           ctx.drawImage(img, 0, 0, newWidthPx, newHeightPx);
 
-          const { blob } = await canvasToJPEGWithDPI(canvas, dpi, 0.95);
+          const { blob } = await canvasToJPEGWithDPI(canvas, dpi, 1.0);
+
+          // 새 파일명 생성 (원본명_가로x세로.확장자)
+          const newFileName = getNewFileName(item.name, widthInch, heightInch);
 
           if (outputDirHandle) {
-            const fileHandle = await outputDirHandle.getFileHandle(item.name, { create: true });
+            // 하위 폴더 구조 유지하며 저장 (폴더명에도 치수 추가)
+            const targetDir = await getOrCreateSubDir(outputDirHandle, item.relativePath, widthInch, heightInch);
+            const fileHandle = await targetDir.getFileHandle(newFileName, { create: true });
             const writable = await fileHandle.createWritable();
             await writable.write(blob);
             await writable.close();
           } else {
-            fallbackDownload(blob, item.name);
+            fallbackDownload(blob, newFileName);
           }
 
           processedCount++;
@@ -3440,6 +4370,291 @@
 
       document.getElementById('resizeBtn').disabled = false;
       document.getElementById('resizeBtn').innerHTML = '📐 사이즈 변경 + 저장';
+    });
+
+    // ========== 이미지 반으로 자르기 ==========
+    let cutOriginalImage = null;
+    let cutFileName = '';
+    let cutLeftBlob = null;
+    let cutRightBlob = null;
+    let cutOriginalDPI = 300;
+    let cutDirectoryHandle = null;
+    let cutSaveBothState = 'select';
+
+    function resetCutTool() {
+      cutOriginalImage = null;
+      cutFileName = '';
+      cutLeftBlob = null;
+      cutRightBlob = null;
+      cutOriginalDPI = 300;
+      cutSaveBothState = 'select';
+      document.getElementById('cutImageInfo').classList.remove('show');
+      document.getElementById('cutPreviewSection').classList.remove('show');
+      document.getElementById('cutResultSection').classList.remove('show');
+      document.getElementById('cutSaveNotification').classList.remove('show');
+      document.getElementById('cutFolderName').textContent = '원본 파일 위치에 자동 저장';
+      document.getElementById('cutOriginalPreview').src = '';
+      document.getElementById('cutLeftPreview').src = '';
+      document.getElementById('cutRightPreview').src = '';
+      document.getElementById('cutSaveBothBtn').innerHTML = '💾 왼쪽+오른쪽 모두 저장';
+    }
+
+    const cutUploadZone = document.getElementById('cutUploadZone');
+    const cutFileInputEl = document.getElementById('cutFileInput');
+
+    cutUploadZone.addEventListener('click', async () => {
+      if ('showOpenFilePicker' in window) {
+        try {
+          const [fileHandle] = await window.showOpenFilePicker({
+            types: [{ description: '이미지 파일', accept: { 'image/*': ['.jpg', '.jpeg', '.png'] } }],
+            multiple: false
+          });
+          document.getElementById('cutFolderName').textContent = '📁 원본 위치에 자동 저장';
+          const file = await fileHandle.getFile();
+          handleCutFile(file);
+        } catch (err) {
+          if (err.name !== 'AbortError') console.error(err);
+        }
+      } else {
+        cutFileInputEl.click();
+      }
+    });
+
+    cutUploadZone.addEventListener('dragover', (e) => { e.preventDefault(); cutUploadZone.classList.add('dragover'); });
+    cutUploadZone.addEventListener('dragleave', () => cutUploadZone.classList.remove('dragover'));
+    cutUploadZone.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      cutUploadZone.classList.remove('dragover');
+      const items = e.dataTransfer.items;
+      if (items && items.length > 0) {
+        for (const item of items) {
+          if (item.kind === 'file') {
+            try {
+              const handle = await item.getAsFileSystemHandle();
+              if (handle && handle.kind === 'directory') {
+                cutDirectoryHandle = handle;
+                await requestWritePermission(cutDirectoryHandle);
+                document.getElementById('cutFolderName').textContent = `📁 ${cutDirectoryHandle.name}`;
+                const imageFiles = [];
+                for await (const entry of cutDirectoryHandle.values()) {
+                  if (entry.kind === 'file') {
+                    const name = entry.name.toLowerCase();
+                    if (name.endsWith('.jpg') || name.endsWith('.jpeg') || name.endsWith('.png')) {
+                      imageFiles.push(entry);
+                    }
+                  }
+                }
+                if (imageFiles.length > 0) {
+                  imageFiles.sort((a, b) => a.name.localeCompare(b.name, 'ko', { numeric: true }));
+                  const file = await imageFiles[0].getFile();
+                  handleCutFile(file);
+                }
+                return;
+              } else if (handle && handle.kind === 'file') {
+                const file = await handle.getFile();
+                handleCutFile(file);
+                return;
+              }
+            } catch (err) {
+              console.log('FileSystemHandle 미지원');
+            }
+          }
+        }
+      }
+      if (e.dataTransfer.files.length > 0) {
+        handleCutFile(e.dataTransfer.files[0]);
+      }
+    });
+
+    cutFileInputEl.addEventListener('change', (e) => {
+      if (e.target.files.length > 0) handleCutFile(e.target.files[0]);
+    });
+
+    async function handleCutFile(file) {
+      if (!file.type.match('image.*')) {
+        alert('이미지 파일만 업로드 가능합니다.');
+        return;
+      }
+      cutFileName = file.name.replace(/\.[^/.]+$/, '');
+      document.getElementById('cutResultSection').classList.remove('show');
+      document.getElementById('cutSaveNotification').classList.remove('show');
+
+      const arrayBuffer = await file.arrayBuffer();
+      if (file.type === 'image/jpeg' || file.type === 'image/jpg') {
+        cutOriginalDPI = extractDPIFromJPEG(arrayBuffer);
+      } else {
+        cutOriginalDPI = 300;
+      }
+
+      const blob = new Blob([arrayBuffer], { type: file.type });
+      const imageUrl = URL.createObjectURL(blob);
+
+      const img = new Image();
+      img.onload = () => {
+        cutOriginalImage = img;
+        const halfWidth = Math.floor(img.width / 2);
+        document.getElementById('cutInfoFileName').textContent = file.name;
+        document.getElementById('cutInfoSize').textContent = `${img.width} × ${img.height}px`;
+        document.getElementById('cutInfoFileSize').textContent = (file.size / 1024 / 1024).toFixed(2) + ' MB';
+        document.getElementById('cutInfoDPI').textContent = `${cutOriginalDPI} DPI (픽셀/인치)`;
+        document.getElementById('cutInfoCutSize').textContent = `${halfWidth} × ${img.height}px (각각)`;
+        document.getElementById('cutImageInfo').classList.add('show');
+        document.getElementById('cutOriginalPreview').src = imageUrl;
+        document.getElementById('cutPreviewSection').classList.add('show');
+        setTimeout(() => smoothScrollToBottom(800), 150);
+      };
+      img.src = imageUrl;
+    }
+
+    document.getElementById('cutBtn').addEventListener('click', async () => {
+      if (!cutOriginalImage) return;
+      const btn = document.getElementById('cutBtn');
+      btn.disabled = true;
+      btn.innerHTML = '<span class="pulse">🔪 자르는 중...</span>';
+
+      const halfWidth = Math.floor(cutOriginalImage.width / 2);
+      const rightWidth = cutOriginalImage.width - halfWidth;
+      const fullHeight = cutOriginalImage.height;
+
+      // 왼쪽 절반 캔버스 (실제 크기: halfWidth × fullHeight)
+      const leftCanvas = document.createElement('canvas');
+      leftCanvas.width = halfWidth;
+      leftCanvas.height = fullHeight;
+      const leftCtx = leftCanvas.getContext('2d');
+      leftCtx.fillStyle = '#FFFFFF';
+      leftCtx.fillRect(0, 0, halfWidth, fullHeight);
+      leftCtx.drawImage(cutOriginalImage, 0, 0, halfWidth, fullHeight, 0, 0, halfWidth, fullHeight);
+
+      // 오른쪽 절반 캔버스 (실제 크기: rightWidth × fullHeight)
+      const rightCanvas = document.createElement('canvas');
+      rightCanvas.width = rightWidth;
+      rightCanvas.height = fullHeight;
+      const rightCtx = rightCanvas.getContext('2d');
+      rightCtx.fillStyle = '#FFFFFF';
+      rightCtx.fillRect(0, 0, rightWidth, fullHeight);
+      rightCtx.drawImage(cutOriginalImage, halfWidth, 0, rightWidth, fullHeight, 0, 0, rightWidth, fullHeight);
+
+      // DPI 보존하여 JPEG 변환
+      const leftResult = await canvasToJPEGWithDPI(leftCanvas, cutOriginalDPI, 1.0);
+      const rightResult = await canvasToJPEGWithDPI(rightCanvas, cutOriginalDPI, 1.0);
+
+      cutLeftBlob = leftResult.blob;
+      cutRightBlob = rightResult.blob;
+
+      document.getElementById('cutLeftPreview').src = leftResult.url;
+      document.getElementById('cutRightPreview').src = rightResult.url;
+      document.getElementById('cutResultSizeInfo').textContent = `출력 크기: ${halfWidth} × ${fullHeight}px | 해상도: ${cutOriginalDPI} DPI (픽셀/인치)`;
+      document.getElementById('cutFileNames').textContent = `파일명: ${cutFileName}+L.jpg, ${cutFileName}+R.jpg`;
+      document.getElementById('cutResultSection').classList.add('show');
+
+      btn.disabled = false;
+      btn.innerHTML = '🔪 반으로 자르기';
+
+      setTimeout(() => {
+        document.getElementById('cutResultSection').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 300);
+
+      trackFeatureUsage('이미지 반으로 자르기', 'cut_processed');
+    });
+
+    document.getElementById('downloadCutLeft').addEventListener('click', async () => {
+      if (!cutLeftBlob) return;
+      if (!cutDirectoryHandle && 'showDirectoryPicker' in window) {
+        try {
+          cutDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+          document.getElementById('cutFolderName').textContent = `📁 ${cutDirectoryHandle.name}`;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+      const leftFileName = `${cutFileName}+L.jpg`;
+      if (cutDirectoryHandle) {
+        await saveToFolder(cutDirectoryHandle, cutLeftBlob, leftFileName);
+        const notif = document.getElementById('cutSaveNotification');
+        notif.innerHTML = `✓ 왼쪽(+L) 저장 완료!<br><small style="font-weight: 400;">${cutDirectoryHandle.name} 폴더에 ${leftFileName} 저장됨</small>`;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 2000);
+      } else {
+        fallbackDownload(cutLeftBlob, leftFileName);
+      }
+      trackFeatureUsage('이미지 반으로 자르기', 'save_left');
+    });
+
+    document.getElementById('downloadCutRight').addEventListener('click', async () => {
+      if (!cutRightBlob) return;
+      if (!cutDirectoryHandle && 'showDirectoryPicker' in window) {
+        try {
+          cutDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+          document.getElementById('cutFolderName').textContent = `📁 ${cutDirectoryHandle.name}`;
+        } catch (err) {
+          if (err.name === 'AbortError') return;
+        }
+      }
+      const rightFileName = `${cutFileName}+R.jpg`;
+      if (cutDirectoryHandle) {
+        await saveToFolder(cutDirectoryHandle, cutRightBlob, rightFileName);
+        const notif = document.getElementById('cutSaveNotification');
+        notif.innerHTML = `✓ 오른쪽(+R) 저장 완료!<br><small style="font-weight: 400;">${cutDirectoryHandle.name} 폴더에 ${rightFileName} 저장됨</small>`;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 2000);
+      } else {
+        fallbackDownload(cutRightBlob, rightFileName);
+      }
+      trackFeatureUsage('이미지 반으로 자르기', 'save_right');
+    });
+
+    document.getElementById('cutSaveBothBtn').addEventListener('click', async () => {
+      if (!cutLeftBlob || !cutRightBlob) return;
+      const btn = document.getElementById('cutSaveBothBtn');
+
+      if (cutSaveBothState === 'select') {
+        if (!cutDirectoryHandle && 'showDirectoryPicker' in window) {
+          try {
+            cutDirectoryHandle = await window.showDirectoryPicker({ mode: 'readwrite' });
+            document.getElementById('cutFolderName').textContent = `📁 ${cutDirectoryHandle.name}`;
+          } catch (err) {
+            if (err.name === 'AbortError') return;
+          }
+        }
+        cutSaveBothState = 'ready';
+        btn.innerHTML = '✓ 저장 확인';
+        setTimeout(() => smoothScrollToBottom(800), 100);
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerHTML = '<span class="pulse">💾 저장 중...</span>';
+
+      const leftFileName = `${cutFileName}+L.jpg`;
+      const rightFileName = `${cutFileName}+R.jpg`;
+      let saveSuccess = false;
+
+      if (cutDirectoryHandle) {
+        const leftSaved = await saveToFolder(cutDirectoryHandle, cutLeftBlob, leftFileName);
+        const rightSaved = await saveToFolder(cutDirectoryHandle, cutRightBlob, rightFileName);
+        saveSuccess = leftSaved && rightSaved;
+      }
+
+      if (saveSuccess) {
+        const notif = document.getElementById('cutSaveNotification');
+        notif.innerHTML = `✓ 저장 완료!<br><small style="font-weight: 400;">${cutDirectoryHandle.name} 폴더에 ${leftFileName}, ${rightFileName} 저장됨</small>`;
+        notif.classList.add('show');
+        setTimeout(() => notif.classList.remove('show'), 3000);
+        trackFeatureUsage('이미지 반으로 자르기', 'save_both');
+      } else if (!cutDirectoryHandle) {
+        fallbackDownload(cutLeftBlob, leftFileName);
+        fallbackDownload(cutRightBlob, rightFileName);
+        trackFeatureUsage('이미지 반으로 자르기', 'download_both');
+      }
+
+      btn.disabled = false;
+      btn.innerHTML = '💾 왼쪽+오른쪽 모두 저장';
+      cutSaveBothState = 'select';
+
+      setTimeout(() => {
+        resetCutTool();
+        smoothScrollToTop(1000);
+      }, 300);
     });
   </script>
 </body>
